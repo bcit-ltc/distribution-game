@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Image } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import '../css/style.css';
 class LandingPage extends Component {
