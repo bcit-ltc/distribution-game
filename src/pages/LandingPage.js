@@ -22,11 +22,11 @@ class LandingPage extends Component {
                         <p className="mt-5">Select one of the following game modules to play:</p>
                         <ul style={{ listStyleType: 'none' }} className="text-start">
                             <li><Link to="/game">
-                                <Button variant="success"> Direct Ship</Button></Link>
+                                <Button variant="success" onClick={() => this.props.setModule('Direct Ship: No Central Warehouse')}> Direct Ship</Button></Link>
                                 <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">No Central Warehouse</p>
                             </li>
                             <li>
-                            <Link to="/game">  <Button variant="success"> Base Game</Button></Link>
+                            <Link to="/game">  <Button variant="success" onClick={() => this.props.setModule('Direct Ship: Central Warehouse')}> Base Game</Button></Link>
                                 <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">Central Warehouse</p>
                             </li>
                         </ul>
