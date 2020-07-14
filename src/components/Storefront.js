@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, Badge, Row, ProgressBar, Form } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
+import { Form } from 'react-bootstrap';
 import { ShopWindow } from 'react-bootstrap-icons';
 import AnimatedNumerical from '../components/AnimatedNumerical';
 
@@ -26,7 +25,7 @@ class Storefront extends Component {
     render() {
         return (
 
-            <div className="col-4 ml-3 d-flex flex-column align-items-start justify-content-around">
+            <div className="d-flex flex-column align-items-start justify-content-around">
                 <h5 style={{ fontSize: '20px', letterSpacing: 2 }}>{this.props.name}</h5>
                 <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
                     <h2>{<AnimatedNumerical to={this.state.inStock - this.props.data.sold} from={this.state.inStock} />}</h2>  <sup style={{ letterSpacing: 1 }}>In Stock</sup>
