@@ -39,7 +39,7 @@ class Supplier extends Component {
                 animated={this.props.processing}
                 variant={index % 2 === 0 ? "info" : 'danger'}
                 now={100/this.props.data.length}
-                key={1}
+                key={index + 1}
                 label={element} />)
         )
 
