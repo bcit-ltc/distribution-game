@@ -5,11 +5,20 @@ import Retailer from "./retailer.js";
 import Route from "./route.js";
 import Transport from "./transport.js";
 
+/**
+ * @summary Represents a turn taken, so has a copy of each location etc with its state during that turn. 
+ * Used mostly to crunch turn totals for the score card
+ */
 class Turn {
     constructor(locations){
         this.locations = locations instanceof Map ? locations : new Map();
     }
 
+    /**
+     * @summary used by the various calculator gets to total up numbers from applicable objects
+     * 
+     * @param {string} propertyName name of the property to find in the Location objects iterated over
+     */
     calcFromLocations(propertyName) {
         let count = 0;
         this.locations.forEach(location => {
@@ -68,11 +77,20 @@ class Turn {
     }
 }
 
+/**
+ * @summary Used to keep, add, and access Turns from usually the Game object. 
+ * Careful when directly manipulating turns!
+ */
 class TurnHistory {
     constructor() {
-        this.turns = [];
+        this.turns = []; // This shouldn't be directly changed (accessing by index is ok);
     }
 
+    /**
+     * @summary Used to simply clone routes for turns.
+     * 
+     * @param {Map} routes A map of routes to iterate over (should have come from a location)
+     */
     cloneRouteData(routes){
         let newRoutes = new Map();
         routes.forEach((route, name) => {
@@ -97,6 +115,11 @@ class TurnHistory {
         return newRoutes;
     }
 
+    /**
+     * @summary Used by usually a Game object to take the current locations a make a turn history for it
+     * 
+     * @param {Map} turnLocations A map of locations from the current Game object to copy into a turn
+     */
     addTurn(turnLocations){
        // we need to clone the locations into a turn, removing the
        // circular references (we shouldn't need them to crunch

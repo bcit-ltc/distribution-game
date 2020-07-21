@@ -1,14 +1,19 @@
 import Transport from "./transport.js";
 
+/**
+ * @summary A route represents how a supplier or warehouse will deliver to their destinations (warehouses or retailers). 
+ * This allows a single location to supply one or many other locations. 
+ * A collection of Transports are kept in an array as orders are made and turns are handled
+ */
 class Route {
 
     constructor(constructorProps = {}){
         this.source = constructorProps.source ? constructorProps.source : null; // Location
         this.destination = constructorProps.destination ? constructorProps.destination : null; // Location
-        this.turnsToDeliver = constructorProps.turnsToDeliver ? constructorProps.turnsToDeliver : 0;
-        this.routeOrderCost = constructorProps.routeOrderCost ? constructorProps.routeOrderCost : 0;
-        this.activeTransports = constructorProps.activeTransports ? constructorProps.activeTransports : [];
-        this.totalTransportsHistoricCount = constructorProps.totalTransportsHistoricCount ? constructorProps.totalTransportsHistoricCount : 0;
+        this.turnsToDeliver = constructorProps.turnsToDeliver ? constructorProps.turnsToDeliver : 0; // How many turns it will take to deliver the goods
+        this.routeOrderCost = constructorProps.routeOrderCost ? constructorProps.routeOrderCost : 0; // How much is charged when the delivery is made
+        this.activeTransports = constructorProps.activeTransports ? constructorProps.activeTransports : []; // Currently active transports
+        this.totalTransportsHistoricCount = constructorProps.totalTransportsHistoricCount ? constructorProps.totalTransportsHistoricCount : 0; // Only for record keeping
         this.currentOrderCosts = constructorProps.currentOrderCosts ? constructorProps.currentOrderCosts : 0; // used to record delivered order costs on a turn by turn basis
     }
 
@@ -58,6 +63,9 @@ class Route {
         }
     }
 
+    /**
+     * @summary Called from its Game object to handle a turn
+     */
     handleTurn(){
         // reset ordercost in preparation of potentially no deliveries this turn
         this.currentOrderCosts = 0;

@@ -1,3 +1,7 @@
+/**
+ * Represents any means of transport for its route. During turns, travels to its destination until there, then 
+ * delivers the goods.
+ */
 class Transport {
 
     constructor(constructorProps = {}){

@@ -4,17 +4,29 @@ import Warehouse from "./warehouse.js";
 import Retailer from "./retailer.js";
 import Data from "./data.js"; // data placeholder
 
+/**
+ * @summary A class representing a game. Some kind of game management class should be using this
+ * to load data into (all the Locations, Routes, settings etc), using the init function to do the pre-game setup,
+ * then calling handleTurn to trigger turns.
+ * 
+ * To change things during turns (creating orders mostly), go through the appropriate locations in the locations property
+ */
 class Game {
     constructor(constructorProps = {}){
         this.currentTurn = constructorProps.currentTurn ? constructorProps.currentTurn : 0; // remember the "real" turn is this plus one because this is an index
         this.turnHistory = constructorProps.turnHistory ? constructorProps.turnHistory : new TurnHistory();
-        this.locations = constructorProps.locations ? constructorProps.locations : new Map();
-        this.minDemand = constructorProps.minDemand ? constructorProps.minDemand : [];
-        this.maxDemand = constructorProps.maxDemand ? constructorProps.maxDemand : [];
-        this.finalTurn = constructorProps.finalTurn ? constructorProps.finalTurn : 59;
-        this.hasInitialized = false;
+        this.locations = constructorProps.locations ? constructorProps.locations : new Map(); // hopefully this is filled with data otherwise this game will be boring!
+        this.minDemand = constructorProps.minDemand ? constructorProps.minDemand : []; // each index corresponds to a turn, so should be the same size as how many turns the game is
+        this.maxDemand = constructorProps.maxDemand ? constructorProps.maxDemand : []; // same as above, but for max possible demand per turn
+        this.finalTurn = constructorProps.finalTurn ? constructorProps.finalTurn : 59; // should be an index so consider a real number, minus one (e.g. a game 60 turns should be set to 59)
+        this.hasInitialized = false; // setting this outside of using init or testing makes you a bad person :(
     }
 
+    /**
+     * @summary used by the various calculator gets to total up numbers from applicable objects
+     * 
+     * @param {string} propertyName name of the property to find in the Turn objects iterated over
+     */
     calcTotalsFromTurns(propertyName){
         let count = 0;
         this.turnHistory.turns.forEach(turn => {
@@ -73,6 +85,10 @@ class Game {
         return Math.round(fillRate / turns.length);
     }
 
+    /**
+     * @summary Used by the game to do pre-turn setup, so the player can play the game
+     * Turns can't be handled until this is called
+     */
     init(){
         // here we would put a proper data fetch, for now, we can just fetch from "Data.js"
         const gameLocations = Data.locationsGame1; // TODO: load appropriate game selected
@@ -93,6 +109,12 @@ class Game {
         this.hasInitialized = true;
     }
 
+    /**
+     * @summary Base method to make a turn happen. Simply call to move onto the nex turn. Put all necessary steps here, and its
+     * similar functions in the other classes for this game.
+     * 
+     * Note that this is the only handleTurn function that should be called directly (the others will be called by this)
+     */
     handleTurn(){
         if(!this.hasInitialized){
             console.error("Please ensure init has been run before handling turns with the Game object");

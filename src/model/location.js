@@ -1,3 +1,7 @@
+/**
+ * @summary a simple parent class for Locations to be "typed" as such, where common components can be put
+ * All location types should inherit from this.
+ */
 class Location {
 
     constructor(constructorProps = {}){

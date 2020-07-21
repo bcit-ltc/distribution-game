@@ -1,21 +1,25 @@
 import Location from "./location.js";
 
+/**
+ * @summary Represents a retail location in the game. The Game will set the demand per turn, and Transports will
+ * delver goods when appropriate.
+ */
 class Retailer extends Location {
 
     constructor(constructorProps = {}){
         super(constructorProps);
-        this.sources = constructorProps.sources ? constructorProps.sources : new Map();
-        this.profitOfGoodsSold = constructorProps.profitOfGoodsSold ? constructorProps.profitOfGoodsSold : 0;
-        this.costOfGoodsSold = constructorProps.costOfGoodsSold ? constructorProps.costOfGoodsSold : 0;
-        this.currentStock = constructorProps.currentStock ? constructorProps.currentStock : 0;
+        this.sources = constructorProps.sources ? constructorProps.sources : new Map(); // only used for ease of references
+        this.profitOfGoodsSold = constructorProps.profitOfGoodsSold ? constructorProps.profitOfGoodsSold : 0; // how much a good sells for
+        this.costOfGoodsSold = constructorProps.costOfGoodsSold ? constructorProps.costOfGoodsSold : 0; // how much a good costs (only when sold, see get property "currentCostOfGoods")
+        this.currentStock = constructorProps.currentStock ? constructorProps.currentStock : 0; // how many goods there are
         this.currentDemand = constructorProps.currentDemand ? constructorProps.currentDemand : 0;
-        this.currentLostDemand = constructorProps.currentLostDemand ? constructorProps.currentLostDemand : 0; // used to track when demand exceeded stock for the turn
+        this.currentLostDemand = constructorProps.currentLostDemand ? constructorProps.currentLostDemand : 0; // used to track when demand exceeded stock for the turn (see handleTurn)
         this.currentItemsSold = constructorProps.currentItemsSold ? constructorProps.currentItemsSold : 0; // used to track what the items sold were between turns (see handleTurn)
         this.currentFillRate = constructorProps.currentFillRate ? constructorProps.currentFillRate : 100; // a number from 0 to 100 to represet a fill rate. calulated during handleTurn
     }
 
     get inventoryHoldingCost() {
-        return this.costOfGoodsSold * 0.0002;
+        return this.costOfGoodsSold * 0.0002; // TODO: unmagic?
     }
 
     get currentSales() {
@@ -53,6 +57,9 @@ class Retailer extends Location {
         this.currentStock += loadCount;
     }
 
+    /**
+     * @summary Called from its Game object to handle a turn
+     */
     handleTurn(){
         // before doing turn stuff, reset the lost demand for the following
         // count

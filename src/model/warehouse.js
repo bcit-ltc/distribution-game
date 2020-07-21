@@ -1,19 +1,35 @@
 import Location from "./location.js";
 
+/**
+ * @summary Represents a warehouse location, which can both recieve and send goods, and has finite goods. This makes it 
+ * more complicated to handled in game terms than a simple supplier.
+ */
 class Warehouse extends Location {
 
     constructor(constructorProps = {}){
         super(constructorProps);
-        this.sources = constructorProps.sources ? constructorProps.sources : new Map();
+        this.sources = constructorProps.sources ? constructorProps.sources : new Map(); // only used for convienient referencing
         this.deliveryRoutes = constructorProps.deliveryRoutes ? constructorProps.deliveryRoutes : new Map();
-        this.carryingCost = constructorProps.carryingCost ? constructorProps.carryingCost : 0.2;
-        this.currentStock = constructorProps.currentStock ? constructorProps.currentStock : 0;
+        this.carryingCost = constructorProps.carryingCost ? constructorProps.carryingCost : 0.2; // how much per good per turn it costs to "hold"
+        this.currentStock = constructorProps.currentStock ? constructorProps.currentStock : 0; // how many goods currently
     }
 
     get inventoryHoldingCost() {
         return this.carryingCost * this.currentStock;
     }
 
+    /**
+     * @summary Used during turns (I.E. not currently handling a turn) to create new orders through a route. Will return an
+     * enum based on success, failure, etc.
+     * 
+     * Note a warehouse, having finite stock, can fill a partial order.
+     * 
+     * @param {string} routeName Name of the route to call (the caller will need their own reference or to look through 
+     * this object's deliveryRoutes to know the correct name)
+     * @param {number} orderCount How many goods to order
+     * 
+     * @returns {Location.orderEnum} An enum representing the order state (so the caller can respond appropriately)
+     */
     createOrder(route, orderCount){
         const possibleRoute = this.deliveryRoutes.get(route);
         if(possibleRoute){
@@ -47,6 +63,9 @@ class Warehouse extends Location {
         this.currentStock += loadCount;
     }
 
+    /**
+     * @summary Called from its Game object to handle a turn
+     */
     handleTurn(){
         // orders have been created in between turns, so now it's time to move them
         this.deliveryRoutes.forEach((value, key) => {
