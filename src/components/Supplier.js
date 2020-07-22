@@ -10,6 +10,7 @@ class Supplier extends Component {
         this.state = {
             value: null,
             data: [1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 9, 7],
+            order: null
         }
     }
     componentDidMount() {
@@ -54,7 +55,7 @@ class Supplier extends Component {
                 <ProgressBar style={{ height: '25px' }} className="mb-2">
                     {this.renderProgressBar()}
                 </ProgressBar>
-                <Form.Control className="col-1" type="number" min="0" placeholder="0" />
+                <Form.Control value={this.state.order} onChange={(e) => {this.setState({order: e.target.value}); this.props.updateOrder(e.target.value)}} className="col-1" type="number" min="0" placeholder="0" />
             </Form.Group>
 
         )

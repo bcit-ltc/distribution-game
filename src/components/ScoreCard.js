@@ -24,7 +24,48 @@ class ScoreCard extends Component {
                             Score Card
         </Accordion.Toggle>
                         <Accordion.Collapse className=" mt-5 bg-secondary position-fixed" eventKey="0">
-                            <Card.Body>Hello! I'm the body</Card.Body>
+                        <Table className="m-0 p-0 col-8" style={{fontSize: '12px'}}>
+                                    <thead>
+                                        <tr className="text-center">
+                                            <th colSpan="2">Categories</th>
+                                            
+                                            <th colSpan="2">To Date</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="3">Sales</td>
+                                            
+                                            <td>$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">Cost of Goods Sold</td>
+                                            <td colSpan="2">0</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">Gross Margin</td>
+                                            <td colSpan="2">$0</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">Order Costs </td>
+                                            <td colSpan="2">0</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">Inventory Costs </td>
+                                            <td colSpan="2">0</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="2">Operating Profit </td>
+                                            <td colSpan="2">$0</td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </Table>
                         </Accordion.Collapse>
                     </Card>
                     <Button onClick={() => this.props.close()}>Close</Button>
