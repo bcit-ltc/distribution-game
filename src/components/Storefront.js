@@ -9,8 +9,8 @@ class Storefront extends Component {
         super(props);
         this.state = {
             days: 0,
-            inStock: 100,
-            sold: null
+            inStock: 0,
+            sold: 0
         }
     }
 
@@ -19,7 +19,10 @@ class Storefront extends Component {
     }
 
     componentDidMount() {
-        this.setState({ inStock: this.state.inStock + this.props.data.stockReceived, sold: this.props.data.sold })
+        this.setState({
+            inStock: this.state.inStock + this.props.data.inStock,
+            sold: this.props.data.sold
+        })
     }
 
     render() {

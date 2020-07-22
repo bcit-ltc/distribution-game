@@ -43,8 +43,6 @@ class GamePage extends Component {
 
     process() {
 
-        //this.storeFront.current.update();
-
         let newData = this.state.supplierData;
 
         for (let x = 0; x < this.state.supplierData.length; x++) {
@@ -150,7 +148,7 @@ class GamePage extends Component {
                             {this.state.gameData.storeFronts.map((i, index) =>
                                 <Storefront
                                     name={i.name}
-                                    data={data.Vancouver[this.state.days]}
+                                    data={i}
                                 />
                             )}
                         </div>
