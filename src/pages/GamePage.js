@@ -23,11 +23,11 @@ class GamePage extends Component {
             newOrder: 0,
             gameData: {
                 'storeFronts': [
-                    { name: 'Vancouver', order: 0, inStock: 45, sold: 0 },
-                    { name: 'Burnaby', order: 0, inStock: 45, sold: 0 },
-                    { name: 'Richmond', order: 0, inStock: 45, sold: 0 }],
+                    { name: 'Vancouver', newOrder: 0, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Burnaby', newOrder: 0, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Richmond', newOrder: 0, order: [0], inStock: 45, sold: 0 }],
                 'supplier':
-                    { 'inStock': [23, 50], order: 0, 'inTransit': [43, 90] }
+                    { 'inStock': [23, 50], order: [0], 'inTransit': [43, 90] }
             }
         }
     }
@@ -35,54 +35,75 @@ class GamePage extends Component {
     updateOrder(e, index) {
         let data = this.state.gameData;
 
-        data.storeFronts[index].order = e;
+        data.storeFronts[index].newOrder = e;
 
         this.setState({ gameData: data })
         console.log(this.state.gameData)
     }
 
-    process() {
+    setupSupplyChain() {
 
-        let newData = this.state.supplierData;
+        let data = this.state.gameData;
+        console.log(data);
+        if (this.props.selectedModule === 'Direct Ship: Central Warehouse') {
+            for (let x = 0; x < data.storeFronts.length; x++) {
+                data.storeFronts[x].order = [0, 0, 0, 0, 0, 0];
+            }
+            data.supplier.order = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-        for (let x = 0; x < this.state.supplierData.length; x++) {
-
-            if (x == 0) {
-                console.log(this.state.supplierData[x - 1]);
-                newData[x] = 13;
-            } else {
-                console.log(this.state.supplierData[x - 1]);
-                newData[x] = this.state.supplierData[x - 1];
+        } else {
+            for (let x = 0; x < data.storeFronts.length; x++) {
+                data.storeFronts[x].order = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             }
         }
 
-        this.setState({ days: this.state.days + 1, processing: true, data: newData });
+        this.setState({ gameData: data });
+    }
+
+    process() {
         const timer = setTimeout(() => {
             this.setState({ processing: false })
         }, 2000);
+
+        let gameData = this.state.gameData;
+        console.log(gameData);
+        for( let x = 0; x < gameData.storeFronts.length; x++){
+
+            gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
+            gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1];
+            gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
+            // let currentOrder = gameData.storeFronts[x].order;
+            // for( let i = 0; i < gameData.storeFronts[x].order.length; i++){
+            //     if(i !== 0){
+            //         gameData.storeFronts[x].order[i] = currentOrder[i - 1];
+            //     } else{
+
+            //     }
+            // }
+            // gameData.storeFronts[x].order[0] =  gameData.storeFronts[x].newOrder;
+        }
+        
+        this.setState({ days: this.state.days + 1, processing: true, gameData: gameData });
+        
         return () => clearTimeout(timer);
 
     }
 
     componentDidMount() {
-        this.setState({ centralWarehouse: this.props.selectedModule === 'Direct Ship: Central Warehouse' })
-        if (this.props.selectedModule === 'Direct Ship: Central Warehouse') {
-            this.setState({
-                supplierData: [0, 0, 0, 0, 0, 0]
-                // inStock: [23, 50],
-                // inTransit: [43, 90]
-            })
-        }
+
+        this.setState({ centralWarehouse: this.props.selectedModule === 'Direct Ship: Central Warehouse' });
+        this.setupSupplyChain();
+
     }
 
     render() {
 
 
-        let data = {
-            "Vancouver": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }],
-            "Burnaby": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }],
-            "Richmond": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }]
-        }
+        // let data = {
+        //     "Vancouver": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }],
+        //     "Burnaby": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }],
+        //     "Richmond": [{ "sold": 2, "stockReceived": 25 }, { "sold": 12, "stockReceived": 5 }, { "sold": 10, "stockReceived": 42 }, { "sold": 32, "stockReceived": 15 }, { "sold": 22, "stockReceived": 52 }, { "sold": 21, "stockReceived": 65 }, { "sold": 9, "stockReceived": 15 }, { "sold": 21, "stockReceived": 25 }, { "sold": 20, "stockReceived": 15 }, { "sold": 42, "stockReceived": 29 }]
+        // }
 
         return (
             <Container style={{ height: '100%', minHeight: '100vh' }} className=" bg-dark d-flex p-0 m-0 flex-column align-items-center justify-content-space-between col-12 h-100 text-white">
@@ -149,6 +170,7 @@ class GamePage extends Component {
                                 <Storefront
                                     name={i.name}
                                     data={i}
+                                    key={index + 1}
                                 />
                             )}
                         </div>
@@ -166,7 +188,10 @@ class GamePage extends Component {
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse className="p-2 " eventKey="0">
-                                            <Supplier data={['12', '32', '12', '09', '12', '32', '12', '09', '12', '32', '12', '09', '12', '32', '12', '09']} name={null} processing={this.state.processing} />
+                                            <Supplier
+                                                data={this.state.gameData.supplier.order}
+                                                name={null}
+                                                processing={this.state.processing} />
                                         </Accordion.Collapse>
                                     </Card>
 
@@ -175,7 +200,7 @@ class GamePage extends Component {
                             {this.state.gameData.storeFronts.map((i, index) =>
                                 <Supplier
                                     updateOrder={(i) => this.updateOrder(i, index)}
-                                    data={this.state.supplierData}
+                                    data={i.order}
                                     name={i.name} processing={this.state.processing} />)}
                         </Form>
                     </Row>

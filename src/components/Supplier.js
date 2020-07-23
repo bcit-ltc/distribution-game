@@ -9,7 +9,6 @@ class Supplier extends Component {
         super(props);
         this.state = {
             value: null,
-            data: [1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 9, 7],
             order: null
         }
     }
@@ -33,8 +32,6 @@ class Supplier extends Component {
     }
 
     renderProgressBar() {
-        //let data = [1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5, 9, 7];
-
         let my = this.props.data.map((element, index) => (
             <ProgressBar
                 animated={this.props.processing}
