@@ -52,7 +52,7 @@ class Supplier extends Component {
                 <ProgressBar style={{ height: '25px' }} className="mb-2">
                     {this.renderProgressBar()}
                 </ProgressBar>
-                <Form.Control value={this.state.order} onChange={(e) => {this.setState({order: e.target.value}); this.props.updateOrder(e.target.value)}} className="col-1" type="number" min="0" placeholder="0" />
+                <Form.Control value={this.state.order} onChange={(e) => {this.setState({order: e.target.value}); this.props.updateOrder(parseInt(e.target.value))}} className="col-1" type="number" min="0" placeholder="0" />
             </Form.Group>
 
         )
