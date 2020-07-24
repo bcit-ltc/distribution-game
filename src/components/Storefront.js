@@ -14,7 +14,6 @@ class Storefront extends Component {
         }
     }
 
-
     componentDidMount() {
 
         console.log(this.props.data.inStock);

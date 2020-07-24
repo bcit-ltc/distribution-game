@@ -60,6 +60,7 @@ class GamePage extends Component {
         this.setState({ gameData: data });
     }
 
+
     process() {
         const timer = setTimeout(() => {
             this.setState({ processing: false })
@@ -67,10 +68,11 @@ class GamePage extends Component {
 
         let gameData = this.state.gameData;
         console.log(gameData);
-        for( let x = 0; x < gameData.storeFronts.length; x++){
+        for (let x = 0; x < gameData.storeFronts.length; x++) {
+            gameData.storeFronts[x].sold = this.itemSold(20);
 
             gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
-            gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1];
+            gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
             gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
             // let currentOrder = gameData.storeFronts[x].order;
             // for( let i = 0; i < gameData.storeFronts[x].order.length; i++){
@@ -82,11 +84,15 @@ class GamePage extends Component {
             // }
             // gameData.storeFronts[x].order[0] =  gameData.storeFronts[x].newOrder;
         }
-        
+
         this.setState({ days: this.state.days + 1, processing: true, gameData: gameData });
-        
+
         return () => clearTimeout(timer);
 
+    }
+
+    itemSold(max) {
+        return Math.floor(Math.random() * Math.floor(max));
     }
 
     componentDidMount() {
