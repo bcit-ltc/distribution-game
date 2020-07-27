@@ -14,22 +14,22 @@ class Supplier extends Component {
     }
     componentDidMount() {
         this.setState({ value: 100 / this.props.data.length });
-        this.processShipment()
+        //this.processShipment()
     }
 
-    processShipment() {
-        this.setState({ value: 1 });
-        const timer = setInterval(() => {
-            if (this.state.value < 8.5) {
-                this.setState({ value: this.state.value + 2 })
-            }
+    // processShipment() {
+    //     this.setState({ value: 1 });
+    //     const timer = setInterval(() => {
+    //         if (this.state.value < 8.5) {
+    //             this.setState({ value: this.state.value + 2 })
+    //         }
 
-        }, 1050);
+    //     }, 1050);
 
-        return () => clearInterval(timer);
+    //     return () => clearInterval(timer);
 
 
-    }
+    // }
 
     renderProgressBar() {
         let my = this.props.data.map((element, index) => (

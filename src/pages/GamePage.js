@@ -27,7 +27,7 @@ class GamePage extends Component {
                     { name: 'Burnaby', newOrder: 0, order: [0], inStock: 45, sold: 0 },
                     { name: 'Richmond', newOrder: 0, order: [0], inStock: 45, sold: 0 }],
                 'supplier':
-                    { 'inStock': [23, 50], order: [0], 'inTransit': [43, 90] }
+                    { 'inStock': 100, newOrder: 0, order: [0], 'inTransit': 0 }
             }
         }
     }
@@ -39,6 +39,14 @@ class GamePage extends Component {
 
         this.setState({ gameData: data })
         console.log(this.state.gameData)
+    }
+
+    updateSupplierOrder(e) {
+        let data = this.state.gameData;
+
+        data.supplier.newOrder = e;
+
+        this.setState({ gameData: data })
     }
 
     setupSupplyChain() {
@@ -61,28 +69,35 @@ class GamePage extends Component {
     }
 
 
+    processSupplierOrder() {
+
+
+        let gameData = this.state.gameData;
+        console.log(gameData);
+        //for (let x = 0; x < gameData.storeFronts.length; x++) {
+        //gameData.storeFronts[x].sold = this.itemSold(20);
+        gameData.supplier.order.unshift(gameData.supplier.newOrder);
+        gameData.supplier.inStock = gameData.supplier.inStock + gameData.supplier.order[gameData.supplier.order.length - 1];
+        gameData.supplier.order.pop(gameData.supplier.order.length - 1);
+        gameData.supplier.inTransit = gameData.supplier.order.reduce((a, b) => a + b, 0);
+        //}
+
+    }
+
     process() {
         const timer = setTimeout(() => {
             this.setState({ processing: false })
         }, 2000);
-
+        if (this.state.centralWarehouse) {
+            this.processSupplierOrder()
+        }
         let gameData = this.state.gameData;
-        console.log(gameData);
+        
         for (let x = 0; x < gameData.storeFronts.length; x++) {
             gameData.storeFronts[x].sold = this.itemSold(20);
-
             gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
             gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
             gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
-            // let currentOrder = gameData.storeFronts[x].order;
-            // for( let i = 0; i < gameData.storeFronts[x].order.length; i++){
-            //     if(i !== 0){
-            //         gameData.storeFronts[x].order[i] = currentOrder[i - 1];
-            //     } else{
-
-            //     }
-            // }
-            // gameData.storeFronts[x].order[0] =  gameData.storeFronts[x].newOrder;
         }
 
         this.setState({ days: this.state.days + 1, processing: true, gameData: gameData });
@@ -139,11 +154,11 @@ class GamePage extends Component {
                                 <h4 className="mt-1" style={{ color: '#FFC108' }}><u>{!this.state.centralWarehouse ? 'Supplier' : 'Central Warehouse'}</u></h4>
                                 {!this.state.centralWarehouse ? null : <Row className="col-12 d-flex justify-content-around">
                                     <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
-                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock[0]} from={this.state.gameData.supplier.inStock[1]} />}</h2>
+                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={this.state.gameData.supplier.inStock} />}</h2>
                                         <sup style={{ letterSpacing: 1 }}>In Stock</sup>
                                     </Form.Text>
                                     <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-3">
-                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inTransit[0]} from={this.state.gameData.supplier.inTransit[1]} />}</h2>
+                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inTransit} from={this.state.gameData.supplier.inTransit} />}</h2>
                                         <sup style={{ letterSpacing: 1 }}>In Transit</sup>
                                     </Form.Text>
                                 </Row>}
@@ -195,6 +210,7 @@ class GamePage extends Component {
                                         </Card.Header>
                                         <Accordion.Collapse className="p-2 " eventKey="0">
                                             <Supplier
+                                                updateOrder={(i) => this.updateSupplierOrder(i)}
                                                 data={this.state.gameData.supplier.order}
                                                 name={null}
                                                 processing={this.state.processing} />
@@ -207,7 +223,8 @@ class GamePage extends Component {
                                 <Supplier
                                     updateOrder={(i) => this.updateOrder(i, index)}
                                     data={i.order}
-                                    name={i.name} processing={this.state.processing} />)}
+                                    name={i.name}
+                                    processing={this.state.processing} />)}
                         </Form>
                     </Row>
                 </Row>
