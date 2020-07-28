@@ -36,6 +36,7 @@ class Storefront extends Component {
                 </Form.Text>
                 <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-danger mt-3 ">
                     <h2>{<AnimatedNumerical
+                    duration={100}
                         to={this.props.data.sold}
                         from={this.props.data.sold - this.state.sold} />}</h2>
                     <sup style={{ letterSpacing: 1 }}>Sold</sup>

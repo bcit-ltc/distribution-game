@@ -13,14 +13,10 @@ class GamePage extends Component {
         super(props);
         this.state = {
             days: 0,
-            processing: false,
-            supplierData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            processing: false, 
             showScorecard: false,
             showSideBar: false,
             centralWarehouse: false,
-            inStock: [],
-            inTransit: [],
-            newOrder: 0,
             gameData: {
                 'storeFronts': [
                     { name: 'Vancouver', newOrder: 0, order: [0], inStock: 45, sold: 0 },
@@ -94,7 +90,7 @@ class GamePage extends Component {
         let gameData = this.state.gameData;
         
         for (let x = 0; x < gameData.storeFronts.length; x++) {
-            gameData.storeFronts[x].sold = this.itemSold(20);
+            gameData.storeFronts[x].sold = this.itemSold(5);
             gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
             gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
             gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
