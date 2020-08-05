@@ -22,7 +22,7 @@ class Supplier extends Component {
             <ProgressBar
                 animated={this.props.processing}
                 variant={index % 2 === 0 ? "info" : 'danger'}
-                now={100/this.props.data.length}
+                now={100 / this.props.data.length}
                 key={index + 1}
                 label={element} />)
         )
@@ -38,7 +38,13 @@ class Supplier extends Component {
                 <ProgressBar style={{ height: '25px' }} className="mb-2">
                     {this.renderProgressBar()}
                 </ProgressBar>
-                <Form.Control value={this.state.order} onChange={(e) => {this.setState({order: e.target.value}); this.props.updateOrder(parseInt(e.target.value))}} className="col-1" type="number" min="0" placeholder="0" />
+                <Form.Control
+                    value={this.state.order}
+                    onChange={(e) => {
+                        this.setState({ order: e.target.value > 0 ? e.target.value.slice(0, 3) : 0 });
+                        this.props.updateOrder(parseInt(e.target.value > 0 ? e.target.value.slice(0, 3) : 0))
+                    }}
+                    className="col-1" type="number" min={0} max={100} placeholder="0" />
             </Form.Group>
 
         )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, Badge, Row, Spinner, Accordion, Card, Form, Dropdown, Table } from 'react-bootstrap';
+import { Button, Container, Col, Badge, Row, Spinner, Accordion, Table, Card, Form, NavDropdown, Nav, Dropdown } from 'react-bootstrap';
 import { ShopWindow } from 'react-bootstrap-icons';
 import Storefront from '../components/Storefront';
 import Supplier from '../components/Supplier';
@@ -12,7 +12,7 @@ class GamePage extends Component {
         super(props);
         this.state = {
             days: 0,
-            processing: false, 
+            processing: false,
             showScorecard: false,
             showSideBar: false,
             centralWarehouse: false,
@@ -28,12 +28,11 @@ class GamePage extends Component {
     }
 
     updateOrder(e, index) {
+        console.log(e);
         let data = this.state.gameData;
-
         data.storeFronts[index].newOrder = e;
-
-        this.setState({ gameData: data })
-        console.log(this.state.gameData)
+        //data.supplier.inStock = data.supplier.inStock - e;
+        this.setState({ gameData: data });
     }
 
     updateSupplierOrder(e) {
@@ -87,7 +86,7 @@ class GamePage extends Component {
             this.processSupplierOrder()
         }
         let gameData = this.state.gameData;
-        
+
         for (let x = 0; x < gameData.storeFronts.length; x++) {
             gameData.storeFronts[x].sold = this.itemSold(5);
             gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
@@ -112,6 +111,25 @@ class GamePage extends Component {
 
     }
 
+    resetApplication() {
+
+        this.setState({
+            days: 0,
+            // processing: false,
+            // showScorecard: false,
+            // showSideBar: false,
+            centralWarehouse: this.state.centralWarehouse,
+            gameData: {
+                'storeFronts': [
+                    { name: 'Vancouver', newOrder: 0, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Burnaby', newOrder: 0, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Richmond', newOrder: 0, order: [0], inStock: 45, sold: 0 }],
+                'supplier':
+                    { 'inStock': 100, newOrder: 0, order: [0], 'inTransit': 0 }
+            }
+        });
+        this.setupSupplyChain();
+    }
     render() {
 
         return (
@@ -121,15 +139,15 @@ class GamePage extends Component {
                     <span className="p-1">
                         <h5 className="text-info" style={{ letterSpacing: 3 }}>The Distribution Game</h5>
                         <h6 style={{ letterSpacing: 2 }}>{this.props.selectedModule}</h6>
-                        <Button size="sm" style={{ fontSize: '15px' }} className="text-monospace mt-2" onClick={() => this.setState({ days: 0 })} variant="outline-light">Reset</Button>
-                        <Button size="sm" style={{ fontSize: '15px' }} className="text-monospace mt-2 ml-5" onClick={() => this.props.history.goBack()} variant="outline-light">Close</Button>
+                        {/* <Button size="sm" style={{ fontSize: '15px' }} className="text-monospace mt-2" //onClick={() => this.resetApplication()} 
+                            variant="outline-light">Reset</Button> */}
+                        <Button size="sm" style={{ fontSize: '15px' }} className="text-monospace mt-2 " onClick={() => this.props.history.goBack()} variant="outline-light">Close</Button>
                     </span>
-
                     <span className="p-4">
                         <Button style={{ fontSize: 20 }} className="text-monospace " variant="success">
                             Day <Badge variant="light">{<AnimatedNumerical to={this.state.days} from={this.state.days} />}</Badge>
                         </Button>
-
+                        <Scorecard/>
                     </span>
 
                 </Row>
@@ -138,26 +156,27 @@ class GamePage extends Component {
                         <Form className="col-12 d-flex flex-column align-items-start ">
                             <div className="ml-3 mt-3">
                                 <h4 className="mt-1" style={{ color: '#FFC108' }}><u>{!this.state.centralWarehouse ? 'Supplier' : 'Central Warehouse'}</u></h4>
-                                {!this.state.centralWarehouse ? null : <Row className="col-12 d-flex justify-content-around">
-                                    <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
-                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={this.state.gameData.supplier.inStock} />}</h2>
-                                        <sup style={{ letterSpacing: 1 }}>In Stock</sup>
-                                    </Form.Text>
-                                    <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-3">
-                                        <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inTransit} from={this.state.gameData.supplier.inTransit} />}</h2>
-                                        <sup style={{ letterSpacing: 1 }}>In Transit</sup>
-                                    </Form.Text>
-                                </Row>}
+                                {!this.state.centralWarehouse ? null :
+                                    <Row className="col-12 d-flex justify-content-around">
+                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
+                                            <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={this.state.gameData.supplier.inStock} />}</h2>
+                                            <sup style={{ letterSpacing: 1 }}>In Stock</sup>
+                                        </Form.Text>
+                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-3">
+                                            <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inTransit} from={this.state.gameData.supplier.inTransit} />}</h2>
+                                            <sup style={{ letterSpacing: 1 }}>In Transit</sup>
+                                        </Form.Text>
+                                    </Row>}
                                 <Form.Text style={{ fontSize: 18 }} className="text-muted mt-3">
                                     {!this.state.centralWarehouse ? 'Add the shipment quantity you want to be delivered to respective storefronts.' : ' Add the shipment quantity you want to be delivered to respective storefronts and warehouse.'}
                                 </Form.Text>
-                                <Form.Group className="mt-1">
+                                <Form.Group className="mt-1 d-flex justify-content-between align-items-center">
                                     <Button disabled={this.state.processing} style={{ fontSize: '15px' }} className="col-6" variant="primary mt-3" onClick={() => this.process()}>
                                         {this.state.processing ?
                                             <Spinner size="sm" animation="grow" role="status" />
                                             : 'Process'}
                                     </Button>
-
+{/* <Scorecard/> */}
                                 </Form.Group>
 
                                 {/* <Button size="sm" onClick={() => this.setState({showScorecard: !this.state.showScorecard})} variant="outline-secondary">Scorecard</Button>
