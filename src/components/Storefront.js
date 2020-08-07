@@ -29,16 +29,18 @@ class Storefront extends Component {
             <div className="d-flex flex-column align-items-start justify-content-around">
                 <h5 style={{ fontSize: '20px', letterSpacing: 2 }}>{this.props.name}</h5>
                 <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
-                    <h2>{<AnimatedNumerical
-                        to={this.props.data.inStock}
-                        from={this.state.inStock} />}</h2>
+                    <h2>{
+                        <AnimatedNumerical
+                            to={this.props.data.inStock}
+                            from={this.state.inStock} />}</h2>
                     <sup style={{ letterSpacing: 1 }}>In Stock</sup>
                 </Form.Text>
                 <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-danger mt-3 ">
-                    <h2>{<AnimatedNumerical
-                    duration={100}
-                        to={this.props.data.sold}
-                        from={this.props.data.sold - this.state.sold} />}</h2>
+                    <h2>{
+                        <AnimatedNumerical
+                            duration={100}
+                            to={this.props.data.sold}
+                            from={this.props.data.sold - this.state.sold} />}</h2>
                     <sup style={{ letterSpacing: 1 }}>Sold</sup>
                 </Form.Text>
             </div>
