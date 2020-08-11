@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ProgressBar, Form, Row } from 'react-bootstrap';
 import { Truck } from 'react-bootstrap-icons';
-
+import AnimatedNumerical from '../components/AnimatedNumerical';
 
 class Supplier extends Component {
 
@@ -40,7 +40,11 @@ class Supplier extends Component {
                     </Form.Label>
                     <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-1">
 
-                        <sup style={{ letterSpacing: 1 }}>In Transit: 0</sup>
+                      {this.props.name === null ? null : <sup style={{ letterSpacing: 1 }}>In Transit: 
+                      <AnimatedNumerical to={this.props.data.reduce((a, b) => a + b, 0)} from={0} />
+                      {/* {this.props.data.reduce((a, b) => a + b, 0)} */}
+                      </sup>
+                      }  
                     </Form.Text>
                 </Row>
                 <Row className="col-12 justify-content-end align-items-center">
@@ -58,9 +62,9 @@ class Supplier extends Component {
                         }}
                         className="col-1" type="number" min={0} max={100} placeholder="0" />
                     <p className="mt-2"><sup style={{ letterSpacing: 1, fontSize: 13 }}>
-                        (18 Days)
+                        ({this.props.data.length} Days)
                         {/* <Truck color="royalblue" className="ml-2" size={30} /> */}
-                        </sup></p>
+                    </sup></p>
                 </Row>
 
             </Form.Group>

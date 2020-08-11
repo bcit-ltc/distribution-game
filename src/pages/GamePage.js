@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, Badge, Row, Spinner, Accordion, Table, Card, Form, NavDropdown, Nav, Dropdown } from 'react-bootstrap';
+import { Button, Container, Col, Badge, Row, Spinner, Accordion, Table, Card, Form, Popover, OverlayTrigger, Toast } from 'react-bootstrap';
 import { ShopWindow } from 'react-bootstrap-icons';
 import Storefront from '../components/Storefront';
 import Supplier from '../components/Supplier';
@@ -23,7 +23,8 @@ class GamePage extends Component {
                     { name: 'Richmond', newOrder: 0, order: [0], inStock: 45, sold: 0 }],
                 'supplier':
                     { 'inStock': 100, newOrder: 0, order: [0], 'inTransit': 0 }
-            }
+            },
+            showNotification: false
         }
     }
 
@@ -79,24 +80,31 @@ class GamePage extends Component {
     }
 
     process() {
-        const timer = setTimeout(() => {
-            this.setState({ processing: false })
-        }, 2000);
-        if (this.state.centralWarehouse) {
-            this.processSupplierOrder()
+
+        if (this.state.centralWarehouse && this.state.gameData.supplier.inStock < this.calculateTotalNewOrder()) {
+            this.setState({ showNotification: true });
+        } else {
+
+            const timer = setTimeout(() => {
+                this.setState({ processing: false })
+            }, 2000);
+            if (this.state.centralWarehouse) {
+                this.processSupplierOrder()
+            }
+            let gameData = this.state.gameData;
+
+            for (let x = 0; x < gameData.storeFronts.length; x++) {
+                gameData.storeFronts[x].sold = this.itemSold(5);
+                gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
+                gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
+                gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
+            }
+            gameData.supplier.inStock = gameData.supplier.inStock - this.calculateTotalNewOrder();
+            this.setState({ days: this.state.days + 1, processing: true, gameData: gameData });
+
+            return () => clearTimeout(timer);
         }
-        let gameData = this.state.gameData;
 
-        for (let x = 0; x < gameData.storeFronts.length; x++) {
-            gameData.storeFronts[x].sold = this.itemSold(5);
-            gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
-            gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
-            gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
-        }
-
-        this.setState({ days: this.state.days + 1, processing: true, gameData: gameData });
-
-        return () => clearTimeout(timer);
 
     }
 
@@ -130,6 +138,16 @@ class GamePage extends Component {
         });
         this.setupSupplyChain();
     }
+
+    calculateTotalNewOrder() {
+        let order = 0;
+
+        for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
+            order = order + this.state.gameData.storeFronts[x].newOrder;
+        }
+
+        return order;
+    }
     render() {
 
         return (
@@ -147,7 +165,7 @@ class GamePage extends Component {
                         <Button style={{ fontSize: 20 }} className="text-monospace " variant="success">
                             Day <Badge variant="light">{<AnimatedNumerical to={this.state.days} from={this.state.days} />}</Badge>
                         </Button>
-                        <Scorecard/>
+                        <Scorecard />
                     </span>
 
                 </Row>
@@ -159,7 +177,7 @@ class GamePage extends Component {
                                 {!this.state.centralWarehouse ? null :
                                     <Row className="col-12 d-flex justify-content-around">
                                         <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
-                                            <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={this.state.gameData.supplier.inStock} />}</h2>
+                                            <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={0} />}</h2>
                                             <sup style={{ letterSpacing: 1 }}>In Stock</sup>
                                         </Form.Text>
                                         <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-3">
@@ -171,12 +189,14 @@ class GamePage extends Component {
                                     {!this.state.centralWarehouse ? 'Add the shipment quantity you want to be delivered to respective storefronts.' : ' Add the shipment quantity you want to be delivered to respective storefronts and warehouse.'}
                                 </Form.Text>
                                 <Form.Group className="mt-1 d-flex justify-content-between align-items-center">
+
                                     <Button disabled={this.state.processing} style={{ fontSize: '15px' }} className="col-6" variant="primary mt-3" onClick={() => this.process()}>
                                         {this.state.processing ?
                                             <Spinner size="sm" animation="grow" role="status" />
                                             : 'Process'}
                                     </Button>
-{/* <Scorecard/> */}
+
+                                    {/* <Scorecard/> */}
                                 </Form.Group>
 
                                 {/* <Button size="sm" onClick={() => this.setState({showScorecard: !this.state.showScorecard})} variant="outline-secondary">Scorecard</Button>
@@ -184,6 +204,7 @@ class GamePage extends Component {
                 //hideScorecard={() => this.setState({showScorecard: false})} 
                 /> */}
                             </div>
+
                         </Form>
                     </Col>
                     <Col style={{ overflowY: 'scroll' }} className="col-7 mt-3 border-2 border-left border-light">
@@ -198,7 +219,36 @@ class GamePage extends Component {
                                 />
                             )}
                         </div>
-
+                        {this.state.centralWarehouse ?
+                            <div className="sticky-top"
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 10,
+                                }}
+                            >
+                                <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark" style={{ minWidth: '300px' }} delay={5000} autohide>
+                                    <Toast.Header>
+                                        <strong className="mr-auto text-info">Order Processing</strong>
+                                        {/* <small>just now</small> */}
+                                    </Toast.Header>
+                                    <Toast.Body >Your order cannot be processed due to the unavailability of stock in the warehouse.
+                                    <Row className="col-12 d-flex justify-content-around">
+                                            <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
+                                                <h2>{this.state.gameData.supplier.inStock
+                                                    // <AnimatedNumerical to={this.state.gameData.supplier.inStock} from={0} />
+                                                }
+                                                </h2>
+                                                <sup style={{ letterSpacing: 1 }}>In Stock</sup>
+                                            </Form.Text>
+                                            <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-danger mt-3">
+                                                <h2>{<AnimatedNumerical to={this.calculateTotalNewOrder()} from={0} />}</h2>
+                                                <sup style={{ letterSpacing: 1 }}>Order</sup>
+                                            </Form.Text>
+                                        </Row>
+                                    </Toast.Body>
+                                </Toast>
+                            </div> : null}
                     </Col>
 
                     <Row style={{ minHeight: '80vh' }} className="p-0 m-0 col-12">
@@ -208,7 +258,7 @@ class GamePage extends Component {
                                     <Card className="bg-dark ">
                                         <Card.Header className="border-white">
                                             <Accordion.Toggle className="text-white " as={Button} variant="link" eventKey="0">
-                                                Warehouse Supplier
+                                                Central Warehouse Supplier
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse className="p-2 " eventKey="0">
