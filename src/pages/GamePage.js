@@ -6,6 +6,7 @@ import Supplier from '../components/Supplier';
 import AnimatedNumerical from '../components/AnimatedNumerical';
 import Scorecard from '../components/ScoreCard';
 import Sidebar from "react-sidebar";
+import { Plus, ArrowRightCircle } from 'react-bootstrap-icons';
 class GamePage extends Component {
 
     constructor(props) {
@@ -18,14 +19,16 @@ class GamePage extends Component {
             centralWarehouse: false,
             gameData: {
                 'storeFronts': [
-                    { name: 'Vancouver', newOrder: 0, order: [0], inStock: 45, sold: 0 },
-                    { name: 'Burnaby', newOrder: 0, order: [0], inStock: 45, sold: 0 },
-                    { name: 'Richmond', newOrder: 0, order: [0], inStock: 45, sold: 0 }],
+                    { name: 'Vancouver', newOrder: null, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Burnaby', newOrder: null, order: [0], inStock: 45, sold: 0 },
+                    { name: 'Richmond', newOrder: null, order: [0], inStock: 45, sold: 0 }],
                 'supplier':
                     { 'inStock': 100, newOrder: 0, order: [0], 'inTransit': 0 }
             },
-            showNotification: false
+            showNotification: false,
+            rotate: true
         }
+        this.supplierRef = React.createRef();
     }
 
     updateOrder(e, index) {
@@ -84,7 +87,7 @@ class GamePage extends Component {
         if (this.state.centralWarehouse && this.state.gameData.supplier.inStock < this.calculateTotalNewOrder()) {
             this.setState({ showNotification: true });
         } else {
-
+            
             const timer = setTimeout(() => {
                 this.setState({ processing: false })
             }, 2000);
@@ -95,7 +98,8 @@ class GamePage extends Component {
 
             for (let x = 0; x < gameData.storeFronts.length; x++) {
                 gameData.storeFronts[x].sold = this.itemSold(5);
-                gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder);
+                gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder === null ? 0 :gameData.storeFronts[x].newOrder);
+                gameData.storeFronts[x].newOrder = 0;
                 gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
                 gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
             }
@@ -178,7 +182,7 @@ class GamePage extends Component {
                                     <Row className="col-12 d-flex justify-content-around">
                                         <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
                                             <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inStock} from={0} />}</h2>
-                                            <sup style={{ letterSpacing: 1 }}>In Stock</sup>
+                                            <sup style={{ letterSpacing: 1 }}>On Hand</sup>
                                         </Form.Text>
                                         <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-3">
                                             <h2>{<AnimatedNumerical to={this.state.gameData.supplier.inTransit} from={this.state.gameData.supplier.inTransit} />}</h2>
@@ -193,7 +197,7 @@ class GamePage extends Component {
                                     <Button disabled={this.state.processing} style={{ fontSize: '15px' }} className="col-6" variant="primary mt-3" onClick={() => this.process()}>
                                         {this.state.processing ?
                                             <Spinner size="sm" animation="grow" role="status" />
-                                            : 'Process'}
+                                            : 'Submit Order'}
                                     </Button>
 
                                     {/* <Scorecard/> */}
@@ -277,6 +281,7 @@ class GamePage extends Component {
                                     updateOrder={(i) => this.updateOrder(i, index)}
                                     data={i.order}
                                     name={i.name}
+                                    newOrder={i.newOrder}
                                     processing={this.state.processing} />)}
                         </Form>
                     </Row>

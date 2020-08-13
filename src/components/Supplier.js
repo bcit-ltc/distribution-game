@@ -9,13 +9,12 @@ class Supplier extends Component {
         super(props);
         this.state = {
             value: null,
-            order: null
+
         }
     }
     componentDidMount() {
         this.setState({ value: 100 / this.props.data.length });
     }
-
 
     renderProgressBar() {
         let my = this.props.data.map((element, index) => (
@@ -40,11 +39,11 @@ class Supplier extends Component {
                     </Form.Label>
                     <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-info mt-1">
 
-                      {this.props.name === null ? null : <sup style={{ letterSpacing: 1 }}>In Transit: 
-                      <AnimatedNumerical to={this.props.data.reduce((a, b) => a + b, 0)} from={0} />
-                      {/* {this.props.data.reduce((a, b) => a + b, 0)} */}
-                      </sup>
-                      }  
+                        {this.props.name === null ? null : <sup style={{ letterSpacing: 1 }}>In Transit:
+                        <AnimatedNumerical to={this.props.data.reduce((a, b) => a + b, 0)} from={0} />
+                            {/* {this.props.data.reduce((a, b) => a + b, 0)} */}
+                        </sup>
+                        }
                     </Form.Text>
                 </Row>
                 <Row className="col-12 justify-content-end align-items-center">
@@ -55,9 +54,9 @@ class Supplier extends Component {
                 </Row>
                 <Row className="col-12 justify-content-between align-items-center">
                     <Form.Control
-                        value={this.state.order}
+                        value={this.props.newOrder}
                         onChange={(e) => {
-                            this.setState({ order: e.target.value > 0 ? e.target.value.slice(0, 3) : 0 });
+                            //this.setState({ order: e.target.value > 0 ? e.target.value.slice(0, 3) : 0 });
                             this.props.updateOrder(parseInt(e.target.value > 0 ? e.target.value.slice(0, 3) : 0))
                         }}
                         className="col-1" type="number" min={0} max={100} placeholder="0" />
