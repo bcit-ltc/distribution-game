@@ -256,7 +256,7 @@ class GamePage extends Component {
                     </Col>
 
                     <Row style={{ minHeight: '80vh' }} className="p-0 m-0 col-12">
-                        <Form className="col-12 mt-3 d-flex flex-column justify-content-start">
+                        <Col className="col-12 col-lg-10 mt-3 d-flex flex-column justify-content-start">
                             {this.state.centralWarehouse ?
                                 <Accordion >
                                     <Card className="bg-dark ">
@@ -283,7 +283,7 @@ class GamePage extends Component {
                                     name={i.name}
                                     newOrder={i.newOrder}
                                     processing={this.state.processing} />)}
-                        </Form>
+                        </Col>
                     </Row>
                 </Row>
             </Container >
