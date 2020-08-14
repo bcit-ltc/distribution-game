@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import '../css/style.css';
 class LandingPage extends Component {
@@ -19,17 +19,17 @@ class LandingPage extends Component {
                 <span className=" p-5" style={{ backgroundColor: 'rgb(1,1,1,0.8)', borderRadius: 10 }}>
                     <h2 className="text-center text-info" style={{ letterSpacing: 3 }}>The Distribution Game</h2>
                     <div style={{ fontSize: '1.2rem' }} className=" col-12 text-monospace">
-                        <p className="mt-5">Select one of the following game modules to play:</p>
-                        <ul style={{ listStyleType: 'none' }} className="text-start">
-                            <li><Link to="/game">
-                                <Button variant="success" onClick={() => this.props.setModule('Direct Ship: No Central Warehouse')}> Direct Ship</Button></Link>
-                                <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">No Central Warehouse</p>
-                            </li>
-                            <li>
-                            <Link to="/game">  <Button variant="success" onClick={() => this.props.setModule('Direct Ship: Central Warehouse')}> Base Game</Button></Link>
-                                <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">Central Warehouse</p>
-                            </li>
-                        </ul>
+                        <p className="mt-4">Select one of the following game modules to play:</p>
+                        <Row className="text-start mt-4 d-flex flex-column align-items-center">
+                            <Link to="/game">
+                                <Button variant="success" onClick={() => this.props.setModule('Direct Ship: No Central Warehouse')}>Direct Ship: No Central Warehouse</Button></Link>
+                            {/* <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">No Central Warehouse</p> */}
+
+                            <Link to="/game">  <Button className="mt-3" variant="success" onClick={() => this.props.setModule('Direct Ship: Central Warehouse')}>Base Game: Central Warehouse</Button></Link>
+                            {/* <p style={{ fontSize: '1rem' }} className="ml-1 mt-2">Central Warehouse</p> */}
+
+                        </Row>
+                        
                     </div>
                 </span>
             </div>

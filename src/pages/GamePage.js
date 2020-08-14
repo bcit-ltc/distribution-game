@@ -231,7 +231,7 @@ class GamePage extends Component {
                                     right: 10,
                                 }}
                             >
-                                <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark" style={{ minWidth: '300px' }} delay={5000} autohide>
+                                <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark" style={{ minWidth: '300px' }} >
                                     <Toast.Header>
                                         <strong className="mr-auto text-info">Order Processing</strong>
                                         {/* <small>just now</small> */}
@@ -261,11 +261,11 @@ class GamePage extends Component {
                                 <Accordion >
                                     <Card className="bg-dark ">
                                         <Card.Header className="border-white">
-                                            <Accordion.Toggle className="text-white " as={Button} variant="link" eventKey="0">
-                                                Central Warehouse Supplier
+                                            <Accordion.Toggle className="text-white bg-success " as={Card.Header} variant="link" eventKey="0">
+                                                Central Warehouse Supplier <ArrowRightCircle className="ml-auto" size={23}/>
                                         </Accordion.Toggle>
                                         </Card.Header>
-                                        <Accordion.Collapse className="p-2 " eventKey="0">
+                                        <Accordion.Collapse className="p-2 bg-dark " eventKey="0">
                                             <Supplier
                                                 updateOrder={(i) => this.updateSupplierOrder(i)}
                                                 data={this.state.gameData.supplier.order}
