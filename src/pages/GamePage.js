@@ -181,7 +181,7 @@ class GamePage extends Component {
                     <Row style={{ minHeight: '80vh' }} className="p-0 m-0 col-12">
                         <Col className="col-12 col-lg-8 mt-3 d-flex flex-column justify-content-start">
                             {this.state.centralWarehouse ?
-                                <Accordion >
+                                <Accordion>
                                     <Card className="bg-dark ">
                                         <Card.Header className="border-white">
                                             <Accordion.Toggle className="text-dark bg-warning " as={Card.Header} variant="link" eventKey="0">
@@ -224,8 +224,29 @@ class GamePage extends Component {
                                 {/* <Scorecard/> */}
                             </Form.Group>
                         </Col>
-                        <Col className="col-4 d-flex  flex-column justify-content-center align-items-center mb-5">
-                            <Table className="m-0 p-0 col-12 mx-auto col-lg-8 bg-light" style={{ fontSize: '12px' }}>
+                        <Col className="col-12 col-lg-4 d-lg-flex flex-column justify-content-center align-items-center mb-5">
+                        <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark " style={{ minWidth: '300px', position: 'absolute', zIndex: 2 }} >
+                                <Toast.Header>
+                                    <strong className="mr-auto text-info">Order Processing</strong>
+                                    {/* <small>just now</small> */}
+                                </Toast.Header>
+                                <Toast.Body >Your order cannot be processed due to the unavailability of stock in the warehouse.
+                                    <Row className="col-12 d-flex justify-content-around">
+                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
+                                            <h2>{this.state.gameData.supplier.inStock
+                                                // <AnimatedNumerical to={this.state.gameData.supplier.inStock} from={0} />
+                                            }
+                                            </h2>
+                                            <sup style={{ letterSpacing: 1 }}>In Stock</sup>
+                                        </Form.Text>
+                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-danger mt-3">
+                                            <h2>{<AnimatedNumerical to={this.calculateTotalNewOrder()} from={0} />}</h2>
+                                            <sup style={{ letterSpacing: 1 }}>Order</sup>
+                                        </Form.Text>
+                                    </Row>
+                                </Toast.Body>
+                            </Toast>
+                            <Table className="m-0 p-0 col-6 mx-auto col-lg-8 bg-light" style={{ fontSize: '12px' }}>
                                 <thead>
                                     <tr className="text-center">
                                         <th colSpan="4" style={{ fontSize: '18px', letterSpacing: 5 }}>ScoreCard</th>
@@ -286,27 +307,7 @@ class GamePage extends Component {
                                     <Spinner size="sm" animation="grow" role="status" />
                                     : 'Submit Order'}
                             </Button>
-                            <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark" style={{ minWidth: '300px', position: 'absolute', zIndex: 2 }} >
-                                <Toast.Header>
-                                    <strong className="mr-auto text-info">Order Processing</strong>
-                                    {/* <small>just now</small> */}
-                                </Toast.Header>
-                                <Toast.Body >Your order cannot be processed due to the unavailability of stock in the warehouse.
-                                    <Row className="col-12 d-flex justify-content-around">
-                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-success mt-3">
-                                            <h2>{this.state.gameData.supplier.inStock
-                                                // <AnimatedNumerical to={this.state.gameData.supplier.inStock} from={0} />
-                                            }
-                                            </h2>
-                                            <sup style={{ letterSpacing: 1 }}>In Stock</sup>
-                                        </Form.Text>
-                                        <Form.Text style={{ fontSize: 18, letterSpacing: 3 }} className="text-danger mt-3">
-                                            <h2>{<AnimatedNumerical to={this.calculateTotalNewOrder()} from={0} />}</h2>
-                                            <sup style={{ letterSpacing: 1 }}>Order</sup>
-                                        </Form.Text>
-                                    </Row>
-                                </Toast.Body>
-                            </Toast>
+                            
                         </Col>
                     </Row>
                 </Row>
