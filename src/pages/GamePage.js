@@ -5,8 +5,8 @@ import Storefront from '../components/Storefront';
 import Supplier from '../components/Supplier';
 import AnimatedNumerical from '../components/AnimatedNumerical';
 import Scorecard from '../components/ScoreCard';
-import Sidebar from "react-sidebar";
 import { ArrowRightCircle } from 'react-bootstrap-icons';
+import { calculateSales } from '../model/ScoreCard';
 class GamePage extends Component {
 
     constructor(props) {
@@ -14,8 +14,6 @@ class GamePage extends Component {
         this.state = {
             days: 0,
             processing: false,
-            showScorecard: false,
-            showSideBar: false,
             centralWarehouse: false,
             gameData: {
                 'storeFronts': [
@@ -25,10 +23,9 @@ class GamePage extends Component {
                 'supplier':
                     { inStock: 100, newOrder: 0, order: [0], inTransit: 0 }
             },
-            showNotification: false,
-            rotate: true
+            showNotification: false
         }
-        this.supplierRef = React.createRef();
+        this.scorecard = React.createRef();
     }
 
     updateOrder(e, index) {
@@ -84,6 +81,16 @@ class GamePage extends Component {
 
     }
 
+    totalItemsSold() {
+        let total = 0;
+        console.log(this.state.gameData.storeFronts.length)
+        for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
+            total = total + this.state.gameData.storeFronts[x].sold
+        }
+        console.log(total)
+        return total
+    }
+
     process() {
 
         if (this.state.centralWarehouse && this.state.gameData.supplier.inStock < this.calculateTotalNewOrder()) {
@@ -93,6 +100,7 @@ class GamePage extends Component {
             const timer = setTimeout(() => {
                 this.setState({ processing: false })
             }, 2000);
+
             if (this.state.centralWarehouse) {
                 this.processSupplierOrder()
             }
@@ -105,6 +113,7 @@ class GamePage extends Component {
                 gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
                 gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
             }
+            this.scorecard.current.calculate_scorecard(this.totalItemsSold(), this.numberofOrderTruck(), this.calculateInventory());
             gameData.supplier.inStock = gameData.supplier.inStock - this.calculateTotalNewOrder();
 
             for (let x = 0; x < gameData.storeFronts.length; x++) {
@@ -125,6 +134,7 @@ class GamePage extends Component {
     componentDidMount() {
         this.setState({ centralWarehouse: this.props.selectedModule === 'Direct Ship: Central Warehouse' });
         this.setupSupplyChain();
+        calculateSales(2)
     }
 
     resetApplication() {
@@ -132,8 +142,6 @@ class GamePage extends Component {
         this.setState({
             days: 0,
             // processing: false,
-            // showScorecard: false,
-            // showSideBar: false,
             centralWarehouse: this.state.centralWarehouse,
             gameData: {
                 'storeFronts': [
@@ -156,6 +164,36 @@ class GamePage extends Component {
 
         return order;
     }
+
+    numberofOrderTruck() {
+        let trucks = { 'retailersTruck': 0, 'suppliersTruck': 0 }
+
+        for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
+
+            if (this.state.gameData.storeFronts[x].newOrder > 0) {
+                trucks.retailersTruck = trucks.retailersTruck + 1;
+            }
+        }
+
+        if (this.state.gameData.supplier.order[0] > 0) {
+            trucks.suppliersTruck = trucks.suppliersTruck + 1
+        }
+
+        return trucks
+    }
+
+    calculateInventory(){
+        let inventory = {supplier: 0, retailer: 0}
+
+        for(let x = 0; x < this.state.gameData.storeFronts.length; x++){
+            inventory.retailer = inventory.retailer + this.state.gameData.storeFronts[x].inStock
+        }
+
+        inventory.supplier =  this.state.centralWarehouse ? this.state.gameData.supplier.inStock : 0;
+
+        return inventory
+    }
+
     render() {
 
         return (
@@ -225,7 +263,7 @@ class GamePage extends Component {
                             </Form.Group>
                         </Col>
                         <Col className="col-12 col-lg-4 d-lg-flex flex-column justify-content-center align-items-center mb-5">
-                        <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark " style={{ minWidth: '300px', position: 'absolute', zIndex: 2 }} >
+                            <Toast show={this.state.showNotification} onClose={() => this.setState({ showNotification: false })} className="bg-dark " style={{ minWidth: '300px', position: 'absolute', zIndex: 2 }} >
                                 <Toast.Header>
                                     <strong className="mr-auto text-info">Order Processing</strong>
                                     {/* <small>just now</small> */}
@@ -246,7 +284,8 @@ class GamePage extends Component {
                                     </Row>
                                 </Toast.Body>
                             </Toast>
-                            <Table className="m-0 p-0 col-6 mx-auto col-lg-8 bg-light" style={{ fontSize: '12px' }}>
+                            <Scorecard ref={this.scorecard} />
+                            {/* <Table className="m-0 p-0 col-6 mx-auto col-lg-8 bg-light" style={{ fontSize: '12px' }}>
                                 <thead>
                                     <tr className="text-center">
                                         <th colSpan="4" style={{ fontSize: '18px', letterSpacing: 5 }}>ScoreCard</th>
@@ -300,14 +339,14 @@ class GamePage extends Component {
 
                                     </tr>
                                 </tbody>
-                            </Table>
+                            </Table> */}
 
                             <Button disabled={this.state.processing} style={{ fontSize: '15px', width: '50%' }} variant="primary mt-3" onClick={() => this.process()}>
                                 {this.state.processing ?
                                     <Spinner size="sm" animation="grow" role="status" />
                                     : 'Submit Order'}
                             </Button>
-                            
+
                         </Col>
                     </Row>
                 </Row>
