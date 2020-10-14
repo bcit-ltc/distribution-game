@@ -82,13 +82,26 @@ class GamePage extends Component {
     }
 
     totalItemsSold() {
-        let total = 0;
+        let totalSold = 0;
+        let totalOrder = 0;
+
         console.log(this.state.gameData.storeFronts.length)
+
         for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
-            total = total + this.state.gameData.storeFronts[x].sold
+            
+            totalOrder = totalOrder + this.state.gameData.storeFronts[x].sold;
+
+            if( this.state.gameData.storeFronts[x].sold < this.state.gameData.storeFronts[x].inStock){
+
+                totalSold = totalSold + this.state.gameData.storeFronts[x].sold
+            } else{
+                totalSold = totalSold + this.state.gameData.storeFronts[x].inStock
+            }
+            
         }
-        console.log(total)
-        return total
+
+        console.log(totalSold)
+        return {'itemsSold':totalSold, 'itemsOrder': totalOrder}
     }
 
     process() {
@@ -111,6 +124,9 @@ class GamePage extends Component {
                 gameData.storeFronts[x].order.unshift(gameData.storeFronts[x].newOrder === null ? 0 : gameData.storeFronts[x].newOrder);
                 //gameData.storeFronts[x].newOrder = 0;
                 gameData.storeFronts[x].inStock = gameData.storeFronts[x].inStock + gameData.storeFronts[x].order[gameData.storeFronts[x].order.length - 1] - gameData.storeFronts[x].sold;
+                if (gameData.storeFronts[x].inStock < 0) {
+                    gameData.storeFronts[x].inStock = 0
+                }
                 gameData.storeFronts[x].order.pop(gameData.storeFronts[x].order.length - 1);
             }
             this.scorecard.current.calculate_scorecard(this.totalItemsSold(), this.numberofOrderTruck(), this.calculateInventory());
@@ -182,14 +198,14 @@ class GamePage extends Component {
         return trucks
     }
 
-    calculateInventory(){
-        let inventory = {supplier: 0, retailer: 0}
+    calculateInventory() {
+        let inventory = { supplier: 0, retailer: 0 }
 
-        for(let x = 0; x < this.state.gameData.storeFronts.length; x++){
+        for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
             inventory.retailer = inventory.retailer + this.state.gameData.storeFronts[x].inStock
         }
 
-        inventory.supplier =  this.state.centralWarehouse ? this.state.gameData.supplier.inStock : 0;
+        inventory.supplier = this.state.centralWarehouse ? this.state.gameData.supplier.inStock : 0;
 
         return inventory
     }

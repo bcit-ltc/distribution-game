@@ -27,12 +27,12 @@ class ScoreCard extends Component {
         this.setState({
             data: {
                 ...this.state.data,
-                cost_GS: this.calculateCostofGoodSales(numberofItems_Sold),
-                sales: this.calculateSales(numberofItems_Sold),
+                cost_GS: this.calculateCostofGoodSales(numberofItems_Sold.itemsSold),
+                sales: this.calculateSales(numberofItems_Sold.itemsSold),
                 orderCost: this.calculateOrderCost(numberofTrucks.suppliersTruck, numberofTrucks.retailersTruck),
                 inventoryCost: this.calculateInventoryCost(inventory.supplier, inventory.retailer),
                 operatingProfit: this.calculateOperatingProfit(),
-                orderFillRate: this.calculateOrderFillRate(numberofItems_Sold, demand)
+                orderFillRate: this.calculateOrderFillRate(numberofItems_Sold.itemsSold, numberofItems_Sold.itemsOrder)
                 //grossMargin: this.sales - this.cost_GS,
 
             }
@@ -83,7 +83,7 @@ class ScoreCard extends Component {
 
     calculateOrderFillRate(sales, demand){
 
-        return (sales/demand) * 100
+        return Math.round((sales/demand) * 100) 
     }
 
     render() {
@@ -101,7 +101,7 @@ class ScoreCard extends Component {
 
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     <tr>
                         <td colSpan="3">Sales</td>
 
@@ -139,7 +139,7 @@ class ScoreCard extends Component {
                     </tr>
                     <tr>
                         <td colSpan="2">Order Fill Rate </td>
-                        <td colSpan="2">20%</td>
+                        <td colSpan="2">{this.state.data.orderFillRate}%</td>
 
                     </tr>
                 </tbody>
