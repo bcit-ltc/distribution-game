@@ -17,13 +17,13 @@ class ScoreCard extends Component {
                 'netProfit': 0,
                 'orderFillRate': 0
             },
-            att: { 'costPrice': 70, 'salePrice': 100, 'retailerOrderCost': 200, 'supplierOrderCost': 100, 'labourCost': 15 , 'overheadCost': 10 }
+            att: { 'costPrice': 70, 'salePrice': 100, 'retailerOrderCost': 200, 'supplierOrderCost': 100, 'labourCost': 15, 'overheadCost': 10 }
         }
     }
 
 
     calculate_scorecard(numberofItems_Sold, numberofTrucks, inventory, demand) {
-    console.log(inventory)
+        console.log(inventory)
         this.setState({
             data: {
                 ...this.state.data,
@@ -32,6 +32,7 @@ class ScoreCard extends Component {
                 orderCost: this.calculateOrderCost(numberofTrucks.suppliersTruck, numberofTrucks.retailersTruck),
                 inventoryCost: this.calculateInventoryCost(inventory.supplier, inventory.retailer),
                 operatingProfit: this.calculateOperatingProfit(),
+                netProfit: this.calculatenetProfit(numberofItems_Sold.itemsSold, this.calculateOperatingProfit()),
                 orderFillRate: this.calculateOrderFillRate(numberofItems_Sold.itemsSold, numberofItems_Sold.itemsOrder)
                 //grossMargin: this.sales - this.cost_GS,
 
@@ -70,21 +71,33 @@ class ScoreCard extends Component {
         return total
     }
 
-    calculateInventoryCost( supplierInventory, retailInventory){
+    calculateInventoryCost(supplierInventory, retailInventory) {
 
-        let cost =  (supplierInventory * this.state.att.costPrice) * 0.21 +  (retailInventory * this.state.att.costPrice) * 0.25
-    
-        return this.state.data.inventoryCost + Math.round(cost/365)
+        let cost = (supplierInventory * this.state.att.costPrice) * 0.21 + (retailInventory * this.state.att.costPrice) * 0.25
+
+        return this.state.data.inventoryCost + Math.round(cost / 365)
     }
 
     calculateOperatingProfit() {
-        return (this.state.data.sales - this.state.data.cost_GS )- (this.state.data.orderCost + this.state.data.inventoryCost )
+        return (this.state.data.sales - this.state.data.cost_GS) - (this.state.data.orderCost + this.state.data.inventoryCost)
     }
 
-    calculateOrderFillRate(sales, demand){
+    calculateOrderFillRate(sales, demand) {
 
-        return Math.round((sales/demand) * 100) 
+        return Math.round((sales / demand) * 100)
     }
+
+    calculatenetProfit(numberofItemsSold, operatingProfit) {
+
+        let netProfit = 0;
+
+        let operatingCost = (this.state.att.labourCost * numberofItemsSold) + this.state.att.overheadCost;
+
+        netProfit = operatingProfit - operatingCost;
+
+        return this.state.data.netProfit + netProfit
+    }
+
 
     render() {
         console.log(this.state.data)
@@ -134,7 +147,7 @@ class ScoreCard extends Component {
                     </tr>
                     <tr>
                         <td colSpan="2">Net Profit </td>
-                        <td colSpan="2">$0</td>
+                        <td colSpan="2">$ {this.state.data.netProfit}</td>
 
                     </tr>
                     <tr>
