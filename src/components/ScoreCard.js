@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Col, Toast, Row, Card, Dropdown } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import AnimatedNumerical from '../components/AnimatedNumerical';
 
 class ScoreCard extends Component {
@@ -17,6 +17,7 @@ class ScoreCard extends Component {
                 'netProfit': 0,
                 'orderFillRate': 0
             },
+            orderFillRateArray: [],
             att: { 'costPrice': 70, 'salePrice': 100, 'retailerOrderCost': 200, 'supplierOrderCost': 100, 'labourCost': 15, 'overheadCost': 10 }
         }
     }
@@ -31,8 +32,8 @@ class ScoreCard extends Component {
                 sales: this.calculateSales(numberofItems_Sold.itemsSold),
                 orderCost: this.calculateOrderCost(numberofTrucks.suppliersTruck, numberofTrucks.retailersTruck),
                 inventoryCost: this.calculateInventoryCost(inventory.supplier, inventory.retailer),
-                operatingProfit: this.calculateOperatingProfit(),
-                netProfit: this.calculatenetProfit(numberofItems_Sold.itemsSold, this.calculateOperatingProfit()),
+                operatingProfit: this.calculateOperatingProfit(this.calculateSales(numberofItems_Sold.itemsSold), this.calculateCostofGoodSales(numberofItems_Sold.itemsSold), this.calculateOrderCost(numberofTrucks.suppliersTruck, numberofTrucks.retailersTruck), this.calculateInventoryCost(inventory.supplier, inventory.retailer)),
+                netProfit: this.calculatenetProfit(this.calculateOperatingProfit(this.calculateSales(numberofItems_Sold.itemsSold), this.calculateCostofGoodSales(numberofItems_Sold.itemsSold), this.calculateOrderCost(numberofTrucks.suppliersTruck, numberofTrucks.retailersTruck), this.calculateInventoryCost(inventory.supplier, inventory.retailer))),
                 orderFillRate: this.calculateOrderFillRate(numberofItems_Sold.itemsSold, numberofItems_Sold.itemsOrder)
                 //grossMargin: this.sales - this.cost_GS,
 
@@ -78,29 +79,45 @@ class ScoreCard extends Component {
         return this.state.data.inventoryCost + Math.round(cost / 365)
     }
 
-    calculateOperatingProfit() {
-        return (this.state.data.sales - this.state.data.cost_GS) - (this.state.data.orderCost + this.state.data.inventoryCost)
+    calculateOperatingProfit(sales, cost_gs, orderCost, inventoryCost) {
+
+        return (sales - cost_gs) - (orderCost + inventoryCost)    
+        //return (this.state.data.sales - this.state.data.cost_GS) - (this.state.data.orderCost + this.state.data.inventoryCost)
+        
     }
 
     calculateOrderFillRate(sales, demand) {
 
-        return Math.round((sales / demand) * 100)
+        this.state.orderFillRateArray.push(Math.round((sales / demand) * 100));
+
+        const sum = this.state.orderFillRateArray.reduce((a, b) => a + b, 0);
+        const avg = (sum / this.state.orderFillRateArray.length) || 0;
+
+        return Math.round(avg);
+
+
     }
 
-    calculatenetProfit(numberofItemsSold, operatingProfit) {
+    calculatenetProfit(operatingProfit) {
 
         let netProfit = 0;
 
-        let operatingCost = (this.state.att.labourCost * numberofItemsSold) + this.state.att.overheadCost;
+        let numberOfLocations = this.props.warehouse ? 4 : 3;
 
-        netProfit = operatingProfit - operatingCost;
+        let operatingCost = (this.state.att.labourCost * numberOfLocations) + this.state.att.overheadCost;
+        
+        console.log('Days:' + this.props.days + '  OC: ' + operatingCost)
 
-        return this.state.data.netProfit + netProfit
+        let i = this.props.days + 1 * operatingCost
+
+        netProfit = this.state.data.operatingProfit - i;
+
+        return netProfit;
     }
 
 
     render() {
-        console.log(this.state.data)
+
         return (
             <Table className="m-0 p-0 col-6 mx-auto col-lg-8 bg-light" style={{ fontSize: '12px' }}>
                 <thead>

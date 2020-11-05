@@ -1,5 +1,6 @@
 {
   "name": "distribution_game",
+  "homepage": "https://ltc.bcit.ca",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
