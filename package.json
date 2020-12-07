@@ -1,5 +1,6 @@
 {
   "name": "distribution_game",
+  "homepage": "https://ltc.bcit.ca/multimedia/distribution_game/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +15,6 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-sidebar": "^3.0.2",
     "react-spring": "^8.0.27"
   },
   "scripts": {
