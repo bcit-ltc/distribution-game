@@ -6,6 +6,7 @@ import Supplier from '../components/Supplier';
 import AnimatedNumerical from '../components/AnimatedNumerical';
 import Scorecard from '../components/ScoreCard';
 import { ArrowRightCircle } from 'react-bootstrap-icons';
+
 import { calculateSales } from '../model/ScoreCard';
 class GamePage extends Component {
 
@@ -88,20 +89,20 @@ class GamePage extends Component {
         console.log(this.state.gameData.storeFronts.length)
 
         for (let x = 0; x < this.state.gameData.storeFronts.length; x++) {
-            
+
             totalOrder = totalOrder + this.state.gameData.storeFronts[x].sold;
 
-            if( this.state.gameData.storeFronts[x].sold < this.state.gameData.storeFronts[x].inStock){
+            if (this.state.gameData.storeFronts[x].sold < this.state.gameData.storeFronts[x].inStock) {
 
                 totalSold = totalSold + this.state.gameData.storeFronts[x].sold
-            } else{
+            } else {
                 totalSold = totalSold + this.state.gameData.storeFronts[x].inStock
             }
-            
+
         }
 
         console.log(totalSold)
-        return {'itemsSold':totalSold, 'itemsOrder': totalOrder}
+        return { 'itemsSold': totalSold, 'itemsOrder': totalOrder }
     }
 
     process() {
@@ -212,6 +213,8 @@ class GamePage extends Component {
 
     render() {
 
+
+
         return (
             <Container style={{ height: '100%', minHeight: '100vh' }} className=" bg-dark d-flex p-0 m-0 flex-column align-items-center justify-content-space-between col-12 h-100 text-white">
                 <Row className=" sticky-top bg-dark p-1 d-flex p-0 m-0 text-start col-12 text-white justify-content-between align-items-center">
@@ -226,8 +229,15 @@ class GamePage extends Component {
                         <Button style={{ fontSize: 20 }} className="text-monospace " variant="success">
                             Day <Badge style={{ fontSize: 22 }} variant="light">{<AnimatedNumerical to={this.state.days} from={this.state.days} />}</Badge>
                         </Button>
-                        <Button size="sm" style={{ fontSize: '15px' }} className="text-monospace mt-2 " onClick={() => this.props.history.goBack()} variant="outline-light">Close</Button>
-                        {/* <Scorecard /> */}
+
+                        <Button
+                            onClick={() => { this.props.history.push('/') }}
+                            size="sm" style={{ fontSize: '15px' }}
+                            className="text-monospace mt-2 "
+                            variant="outline-light">
+                            Close
+                        </Button>
+
                     </span>
 
                 </Row>
