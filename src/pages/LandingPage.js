@@ -24,7 +24,8 @@ class LandingPage extends Component {
                             <Link to="/directShipGame">
                                 <Button
                                     variant="success"
-                                    onClick={() => this.props.setModule('Direct Ship: No Central Warehouse')}>
+                                    //onClick={() => this.props.setModule('Direct Ship: No Central Warehouse')}
+                                    >
                                     Direct Ship: No Central Warehouse
                                 </Button>
                             </Link>
@@ -33,7 +34,8 @@ class LandingPage extends Component {
                             <Link to="/baseGame">
                                 <Button className="mt-3"
                                     variant="success"
-                                    onClick={() => this.props.setModule('Direct Ship: Central Warehouse')}>
+                                    //onClick={() => this.props.setModule('Direct Ship: Central Warehouse')}
+                                    >
                                     Base Game: Central Warehouse
                             </Button>
                             </Link>
