@@ -1,5 +1,10 @@
 image: node:latest
 
+variables:
+  TEST_URL: "https://test.ltc.bcit.ca"
+  PROD_URL: "https://ltc.bcit.ca"
+  WEB_ROOT: "/var/www/html"
+
 cache:
   paths:
     - node_modules/
@@ -7,21 +12,20 @@ cache:
 
 before_script:
   - rm -rf build
-  - apt-get update -qq && apt-get install -y -qq sshpass rsync
 
 deploy_production:
   # only:
   #   refs:
   #     - master
   stage: deploy
-  environment: Production
+  environment:
+    name: production
+    url: "$PROD_URL/VSM/SOB/test"
+
   script:
-    - yarn install
-    - yarn build
-    - cd build/
-    - ls
-    - sshpass -V
-    - export SSHPASS=$FTP_PASSWORD
-    - sshpass -e rsync -r --omit-dir-times -e "ssh -o StrictHostKeyChecking=no" . $FTP_USERNAME@$142.232.76.65:/html/VSM/SOB/test
+    - npm install
+    - npm run build
+    - cd .. && ls -l
+    - rsync -av --delete build/ $WEB_ROOT/VSM/SOB/test
 
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
