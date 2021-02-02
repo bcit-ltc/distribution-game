@@ -23,6 +23,7 @@ deploy_production:
     url: "$PROD_URL/VSM/SOB/test"
 
   script:
+    - ls -l
     - npm install
     - npm run build
     - cd .. && ls -l
