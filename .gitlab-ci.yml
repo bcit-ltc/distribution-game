@@ -7,7 +7,7 @@ cache:
 
 before_script:
   - rm -rf build
-  - CI=false npm install
+  - apt-get update -qq && apt-get install -y -qq sshpass rsync
 
 deploy_production:
   # only:
@@ -20,6 +20,6 @@ deploy_production:
     - yarn build
     - cd build/
     - ls
-    - apt-get update -qy
-    - apt-get install -y lftp
-    - lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e rsync -r --omit-dir-times -e "ssh -o StrictHostKeyChecking=no" . $USER_NAME@$142.232.76.65:/html/VSM/SOB/test
