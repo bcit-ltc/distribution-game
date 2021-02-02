@@ -10,14 +10,16 @@ before_script:
   - CI=false npm install
 
 deploy_production:
-  only:
-    refs:
-      - master
+  # only:
+  #   refs:
+  #     - master
   stage: deploy
   environment: Production
   script:
-    - npm install
-    - npm run build
+    - yarn install
+    - yarn build
+    - cd build/
+    - ls
     - apt-get update -qy
     - apt-get install -y lftp
     - lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
