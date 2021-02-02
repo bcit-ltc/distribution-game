@@ -5,6 +5,10 @@ cache:
     - node_modules/
     - app/bower_components
 
+before_script:
+  - rm -rf build
+  - CI=false npm install
+
 deploy_production:
   only:
     refs:
@@ -12,9 +16,8 @@ deploy_production:
   stage: deploy
   environment: Production
   script:
-    - npm install -g firebase-tools
-    - npm install -g bower
     - npm install
-    - bower install --allow-root
-    - firebase use --token $FIREBASE_DEPLOY_KEY production
-    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_DEPLOY_KEY
+    - npm run build
+    - apt-get update -qy
+    - apt-get install -y lftp
+    - lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
