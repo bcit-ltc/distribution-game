@@ -24,8 +24,8 @@ deploy_production:
 
   script:
     - ls -l
-    - yarn install
-    - yarn run build
+    - npm install
+    - npm build
     - cd .. && ls -l
     - rsync -av --delete build/ $WEB_ROOT/VSM/SOB/test
 
