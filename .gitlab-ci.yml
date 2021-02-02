@@ -1,4 +1,4 @@
-image: node:latest
+image: node:10
 
 variables:
   TEST_URL: "https://test.ltc.bcit.ca"
@@ -24,8 +24,8 @@ deploy_production:
 
   script:
     - ls -l
-    - npm install
-    - npm build
+    - yarn install
+    - yarn build
     - cd .. && ls -l
     - rsync -av --delete build/ $WEB_ROOT/VSM/SOB/test
 
