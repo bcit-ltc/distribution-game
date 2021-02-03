@@ -1,7 +1,7 @@
-# variables:
-#   TEST_URL: "https://test.ltc.bcit.ca"
-#   PROD_URL: "https://ltc.bcit.ca"
-#   WEB_ROOT: "/var/www/html"
+variables:
+  TEST_URL: "https://test.ltc.bcit.ca"
+  PROD_URL: "https://ltc.bcit.ca"
+  WEB_ROOT: "/var/www/html"
 
 stages:
   - build
@@ -23,6 +23,5 @@ deploy_production:
   #     - master
   stage: deploy
   script:
-    - ls -l
-    - echo "Deploying the application"
-    - rsync -av build/ /var/www/html/VSM/SOB/test
+    - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+    - cd .. && rsync -av --delete $CI_PROJECT_NAME/ $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
