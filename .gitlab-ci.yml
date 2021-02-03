@@ -17,14 +17,14 @@ deploy_production:
   environment: Production
   script:
     - echo "Current Path"
-    - echo "$(pwd)"
+    - echo "$pwd"
     - echo "Installing yarn"
     - npm install
     - echo "Building the application"
     - npm run build
     - echo "Getting into build folder"
     - cd ..
-    - echo "New path- $(pwd)"
+    - echo "New path- $pwd"
     - ls -l
     - rsync -av build/ /var/www/html/VSM/SOB/test
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
