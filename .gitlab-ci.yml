@@ -1,9 +1,9 @@
 image: node:10 
 
-variables:
-  TEST_URL: "https://test.ltc.bcit.ca"
-  PROD_URL: "https://ltc.bcit.ca"
-  WEB_ROOT: "/var/www/html"
+# variables:
+#   TEST_URL: "https://test.ltc.bcit.ca"
+#   PROD_URL: "https://ltc.bcit.ca"
+#   WEB_ROOT: "/var/www/html"
 
 cache:
   paths:
@@ -23,5 +23,5 @@ deploy_production:
     - echo "Getting into build folder"
     # - cd build/
     - ls -l
-    - rsync -av --delete build/ $WEB_ROOT/VSM/SOB/test
+    - rsync -av --delete build/ /var/www/html/VSM/SOB/test
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
