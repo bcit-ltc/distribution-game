@@ -14,7 +14,10 @@ deploy_production:
   #   refs:
   #     - master
   stage: deploy
-  environment: Production
+environment:
+    name: production
+    url: "$https://ltc.bcit.ca/VSM/SOB/test"
+
   script:
     - echo "Current Path"
     - echo "$pwd"
