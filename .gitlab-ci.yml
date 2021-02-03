@@ -11,9 +11,9 @@ deploy_production:
   environment: Production
   script:
     - echo "Installing yarn"
-    - yarn install
+    - npm install
     - echo "Building the application"
-    - yarn build
+    - npm run build
     - echo "Getting into build folder"
     - cd build/
     - ls -l
