@@ -8,6 +8,9 @@ stages:
   - deploy
 
 build:
+# only:
+#     refs:
+#       - master
   stage: build
   script:
     - echo "Installing npm"
@@ -18,9 +21,9 @@ build:
     - ls -l
     
 deploy_production:
-  only:
-    refs:
-      - master
+  # only:
+  #   refs:
+  #     - master
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
