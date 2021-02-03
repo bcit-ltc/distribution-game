@@ -23,5 +23,5 @@ deploy_production:
     - echo "Getting into build folder"
     # - cd build/
     - ls -l
-    - rsync -av --delete build/ /var/www/html/VSM/SOB/test
+    # - rsync -av --delete build/ /var/www/html/VSM/SOB/test
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
