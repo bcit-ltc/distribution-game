@@ -27,7 +27,7 @@ deploy_production:
     - echo "Installing npm"
     - npm install
     - echo "Building the application"
-    - npm run bundler
+    - npm run build
     - echo "Path echo"
     - ls -l
     - cd .. && ls -l
