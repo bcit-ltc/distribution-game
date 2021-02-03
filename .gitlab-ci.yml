@@ -10,8 +10,8 @@ stages:
 build:
   stage: build
   script:
-    - echo "Installing npm"
-    - npm install
+    # - echo "Installing npm"
+    # - npm install
     - echo "Building the application"
     - npm run build
     - echo "Build done "
