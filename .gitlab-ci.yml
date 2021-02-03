@@ -25,3 +25,6 @@ deploy_production:
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
     - cd .. && rsync -av --delete $CI_PROJECT_NAME/ $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+  environment:
+    name: production
+    url: "$PROD_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
