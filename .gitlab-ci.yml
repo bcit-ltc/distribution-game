@@ -1,5 +1,3 @@
-image: node:10 
-
 # variables:
 #   TEST_URL: "https://test.ltc.bcit.ca"
 #   PROD_URL: "https://ltc.bcit.ca"
@@ -15,15 +13,13 @@ deploy_production:
   #     - master
   stage: deploy
   script:
-    - echo "Current Path"
-    - echo $pwd
     - echo "Installing npm"
     - npm install
     - echo "Building the application"
     - npm run build
-    - echo "Getting into build folder"
+    - echo "Build done "
     - cd ..
     - echo $pwd
     - ls -l
-    - rsync -av build/ /var/www/html/VSM/SOB/test
+    # - rsync -av build/ /var/www/html/VSM/SOB/test
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
