@@ -14,15 +14,10 @@ deploy_production:
   #   refs:
   #     - master
   stage: deploy
-
-  environment:
-    name: production
-    url: "https://ltc.bcit.ca/VSM/SOB/test"
-
   script:
     - echo "Current Path"
     - echo $pwd
-    - echo "Installing yarn"
+    - echo "Installing npm"
     - npm install
     - echo "Building the application"
     - npm run build
