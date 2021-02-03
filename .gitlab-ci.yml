@@ -30,6 +30,6 @@ deploy_production:
     - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   environment:
     name: production
-    url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
-  # tags:
-  #   - production
+    url: "$PROD_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  tags:
+    - production
