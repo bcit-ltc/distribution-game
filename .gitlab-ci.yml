@@ -3,9 +3,19 @@
 #   PROD_URL: "https://ltc.bcit.ca"
 #   WEB_ROOT: "/var/www/html"
 
-cache:
-  paths:
-    - node_modules/ 
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "Installing npm"
+    - npm install
+    - echo "Building the application"
+    - npm run build
+    - echo "Build done "
+    - ls -l
 
 deploy_production:
   # only:
@@ -13,11 +23,6 @@ deploy_production:
   #     - master
   stage: deploy
   script:
-    - echo "Installing npm"
-    - npm install
-    - echo "Building the application"
-    - npm run build
-    - echo "Build done "
     - ls -l
     - echo "Deploying the application"
     - rsync -av build/ /var/www/html/VSM/SOB/test
