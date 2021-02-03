@@ -15,7 +15,7 @@ deploy_production:
   #     - master
   stage: deploy
 
-environment:
+  environment:
     name: production
     url: "https://ltc.bcit.ca/VSM/SOB/test"
 
@@ -28,7 +28,7 @@ environment:
     - npm run build
     - echo "Getting into build folder"
     - cd ..
-    - echo "New path- "$pwd
+    - echo $pwd
     - ls -l
     - rsync -av build/ /var/www/html/VSM/SOB/test
     #- lftp -e "open sftp://ltc.bcit.ca; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose build /html/VSM/SOB/test; bye"
