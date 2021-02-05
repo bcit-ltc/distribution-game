@@ -38,4 +38,4 @@ deploy_production:
     name: "$ENV"
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - "$ENV"
+    - $ENV
