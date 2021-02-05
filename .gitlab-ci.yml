@@ -12,6 +12,7 @@ build:
     refs:
       - production
       - staging
+      - merge_requests
   stage: build
   script:
     - echo "Current branch"
@@ -30,6 +31,7 @@ deploy_production:
     refs:
       - production
       - staging
+      - merge_requests
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
