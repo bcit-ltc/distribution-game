@@ -1,7 +1,0 @@
-{
-  "projects": {
-    "default": "bcit-distributiongame",
-    "distribution-game": "bcit-distributiongame-f320d",
-    "production": "bcit-distributiongame-f320d"
-  }
-}
