@@ -2,16 +2,16 @@ variables:
   TEST_URL: "https://test.ltc.bcit.ca"
   PROD_URL: "https://ltc.bcit.ca"
   WEB_ROOT: "/var/www/html"
-
+  ENV: "$CI_COMMIT_REF_NAME"
 stages:
   - build
   - deploy
 
 build:
-  only:
-    refs:
-      - production
-      - staging
+  # only:
+  #   refs:
+  #     - production
+  #     - staging
   stage: build
   script:
     - echo "Current branch"
@@ -26,16 +26,16 @@ build:
       - build/
 
 deploy_production:
-  only:
-    refs:
-      - production
-      - staging
+  # only:
+  #   refs:
+  #     - production
+  #     - staging
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
     - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   environment:
-    name: "$CI_COMMIT_REF_NAME"
+    name: "$ENV"
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - "$CI_COMMIT_REF_NAME"
+    - "$ENV"
