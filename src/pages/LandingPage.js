@@ -17,7 +17,7 @@ class LandingPage extends Component {
         return (
             <div id="app" style={{ height: '100%', minHeight: '100vh' }} className=" col-12 d-flex col-sm-justify-content-start flex-column justify-content-center align-items-center col-12 h-100 text-white">
                 <span className=" p-5" style={{ backgroundColor: 'rgb(1,1,1,0.8)', borderRadius: 10 }}>
-                    <h2 className="text-center text-info" style={{ letterSpacing: 3 }}>The Distribution Game: test</h2>
+                    <h2 className="text-center text-info" style={{ letterSpacing: 3 }}>The Distribution Game:</h2>
                     <div style={{ fontSize: '1.2rem', height: '100%' }} className=" col-12 text-monospace">
                         <p className="mt-4">Select one of the following game modules to play:</p>
                         <Row className="text-start mt-4 d-flex flex-column align-items-center">

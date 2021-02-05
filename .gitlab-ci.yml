@@ -8,10 +8,10 @@ stages:
   - deploy
 
 build:
-  # only:
-  #   refs:
-  #     - production
-  #     - staging
+  only:
+    refs:
+      - production
+      - staging
   stage: build
   script:
     - echo "Installing npm"
@@ -23,11 +23,10 @@ build:
     paths:
       - build/
 
-deploy_production:
-  # only:
-  #   refs:
-  #     - production
-  #     - staging
+deploy_staging:
+  only:
+    refs:
+      - staging
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
@@ -36,4 +35,19 @@ deploy_production:
     name: production
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - production
+    - staging 
+
+deploy_production:
+  only:
+    refs:
+      - production
+      - staging
+  stage: deploy
+  script:
+    - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+    - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+  environment:
+    name: production
+    url: "$PROD_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  tags:
+    - production 
