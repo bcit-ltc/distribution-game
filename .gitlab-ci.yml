@@ -3,10 +3,12 @@ variables:
   PROD_URL: "https://ltc.bcit.ca"
   WEB_ROOT: "/var/www/html"
 
+# 2 Stage process: build > deploy
 stages:
   - build
   - deploy
 
+# Stage 1: build
 build:
   only:
     refs:
@@ -23,6 +25,7 @@ build:
     paths:
       - build/
 
+# Stage 2: Deploying on staging environment
 deploy_staging:
   only:
     refs:
@@ -37,6 +40,7 @@ deploy_staging:
   tags:
     - staging 
 
+# Stage 2: Deploying on production environment
 deploy_production:
   only:
     refs:
