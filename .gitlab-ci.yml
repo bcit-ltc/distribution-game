@@ -9,7 +9,6 @@ stages:
 
 build:
   only:
-    - merge_requests
     refs:
       - production
       - staging
@@ -28,7 +27,6 @@ build:
 
 deploy_production:
   only:
-    - merge_requests
     refs:
       - production
       - staging
