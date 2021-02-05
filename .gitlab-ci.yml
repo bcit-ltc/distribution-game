@@ -35,7 +35,7 @@ deploy_production:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
     - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   environment:
-    name: $CI_COMMIT_REF_NAME
+    name: "$CI_COMMIT_REF_NAME"
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - $CI_COMMIT_REF_NAME
+    - "$CI_COMMIT_REF_NAME"
