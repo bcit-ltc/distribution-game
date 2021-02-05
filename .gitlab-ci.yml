@@ -14,6 +14,8 @@ build:
       - staging
   stage: build
   script:
+    - echo "Current branch"
+    - echo "$CI_COMMIT_REF_NAME"
     - echo "Installing npm"
     - npm install
     - echo "Building the application"
