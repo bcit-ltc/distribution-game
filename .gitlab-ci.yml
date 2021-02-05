@@ -41,7 +41,6 @@ deploy_production:
   only:
     refs:
       - production
-      - staging
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
