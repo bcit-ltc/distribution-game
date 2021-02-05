@@ -14,28 +14,39 @@ build:
       - staging
   stage: build
   script:
-    - echo "Current branch"
-    - echo "$CI_COMMIT_REF_NAME"
     - echo "Installing npm"
     - npm install
     - echo "Building the application"
     - npm run build
-    - echo "Build done"
+    - echo "Build Ready"
   artifacts:
     paths:
       - build/
 
-deploy_production:
+deploy_staging:
   only:
     refs:
-      - production
       - staging
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
     - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   environment:
-    name: "$CI_COMMIT_REF_NAME"
+    name: production
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - "$CI_COMMIT_REF_NAME"
+    - staging 
+
+deploy_production:
+  only:
+    refs:
+      - production
+  stage: deploy
+  script:
+    - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+    - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+  environment:
+    name: production
+    url: "$PROD_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  tags:
+    - production 
