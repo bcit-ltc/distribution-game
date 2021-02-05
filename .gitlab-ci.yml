@@ -17,9 +17,10 @@ build:
     - npm install
     - echo "Building the application"
     - npm run build
-    - echo "Build done "
-    - ls -l
-    
+    - echo "Build done"
+  artifacts:
+    paths:
+      - build/
 deploy_production:
   # only:
   #   refs:
