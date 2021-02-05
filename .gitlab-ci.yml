@@ -10,8 +10,7 @@ stages:
 build:
 only:
     refs:
-      - production
-      - staging
+      - master
   stage: build
   script:
     - echo "Installing npm"
@@ -22,18 +21,16 @@ only:
   artifacts:
     paths:
       - build/
-
 deploy_production:
   only:
     refs:
-      - production
-      - staging
+      - master
   stage: deploy
   script:
     - mkdir -p "$WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
     - cd build && rsync -av --delete . $WEB_ROOT/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
   environment:
-    name: $CI_COMMIT_BEFORE_SHA
+    name: production
     url: "$TEST_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   tags:
-    - $CI_COMMIT_BEFORE_SHA
+    - production
