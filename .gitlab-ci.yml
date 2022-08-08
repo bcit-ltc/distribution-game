@@ -124,7 +124,11 @@ default:
     - "${CLUSTER_NAME}"
 
 cache:
-  key: $CI_COMMIT_REF_SLUG
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
 
 ## Configure security scanning
 sast:
