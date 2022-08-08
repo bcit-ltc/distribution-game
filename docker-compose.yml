@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  app:
+    image: distribution_game
+    build:
+      context: .
+      target: builder
+    command: npm run start
+    environment:
+      - DEBUG=True
+    working_dir: /app
+    tty: true
+    volumes:
+      - ./src:/app/src
+      - '/app/node_modules'
+    ports:
+      - "3000:3000"
