@@ -24,7 +24,7 @@ RUN set -ex; \
 COPY --from=builder /app/build ./
 
 
-## Release for production
+## Release
 
 FROM nginxinc/nginx-unprivileged AS release
 
