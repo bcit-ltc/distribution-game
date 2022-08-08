@@ -1,6 +1,6 @@
 # Dockerfile
 
-## Build
+## Build/Dev
 FROM node:14 AS builder
 
 WORKDIR /app
