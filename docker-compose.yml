@@ -2,7 +2,7 @@ version: "3"
 
 services:
   app:
-    image: distribution_game
+    image: distribution-game
     build:
       context: .
       target: builder
@@ -12,7 +12,7 @@ services:
     working_dir: /app
     tty: true
     volumes:
-      - ./src:/app/src
+      - './src:/app/src'
       - '/app/node_modules'
     ports:
       - "3000:3000"
