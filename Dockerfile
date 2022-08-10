@@ -5,11 +5,13 @@ FROM node:14 AS builder
 
 WORKDIR /app
 
+COPY package*.json ./
+
+RUN npm install
+
 COPY . ./
 
-RUN set -ex; \
-    npm install; \
-    npm run build;
+RUN npm run build
 
 
 ## Clean
