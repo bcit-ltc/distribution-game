@@ -10,7 +10,7 @@ commonLabels:
   environment: stable
 
 commonAnnotations:
-  version: stable # {"$imagepolicy": "flux-system:distribution-game:tag"}
+  version: stable # {"$imagepolicy": "distribution-game:distribution-game:tag"}
   tag: ${GIT_TAG:=stable}
 
 configMapGenerator:
@@ -30,4 +30,4 @@ patches:
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "stable" # {"$imagepolicy": "flux-system:distribution-game:tag"}
+    newTag: "stable" # {"$imagepolicy": "distribution-game:distribution-game:tag"}
