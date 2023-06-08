@@ -1,9 +1,8 @@
-## React Based Application - Distribution Game
+# Distribution Game
 
-#Deployed on ltc server : 
+**Deployed on ltc server**
 - Staging Environment:https://test.ltc.bcit.ca/web-apps/distribution_game/#/
 - Production Environment: https://ltc.bcit.ca/web-apps/distribution_game/#/
-
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
