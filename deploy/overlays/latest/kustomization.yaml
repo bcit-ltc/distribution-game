@@ -6,11 +6,11 @@ resources:
 commonLabels:
   environment: latest
 commonAnnotations:
-  version: 1.0.1-65a1ca4b--2023-06-08.1686185340 # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
+  version: 1.0.1-5c7ee479--2023-06-08.1686186030 # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "1.0.1-65a1ca4b--2023-06-08.1686185340" # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
+    newTag: "1.0.1-5c7ee479--2023-06-08.1686186030" # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
 # Adds elasticapm config to deployment
 #
 patches:
