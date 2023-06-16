@@ -15,8 +15,8 @@ patches:
       kind: Ingress
     path: ingress-patch.yaml
 commonAnnotations:
-  version: 2.4.1-8b09e849--2023-04-22--944 # {"$imagepolicy": "flux-system:distribution-game-web:tag"}
+  version: 2.4.1-8b09e849--2023-04-22--944 # {"$imagepolicy": "flux-system:distribution-game-web-image-policy:tag"}
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "2.4.1-8b09e849--2023-04-22--944" # {"$imagepolicy": "flux-system:distribution-game-web:tag"}
+    newTag: "2.4.1-8b09e849--2023-04-22--944" # {"$imagepolicy": "flux-system:distribution-game-web-image-policy:tag"}

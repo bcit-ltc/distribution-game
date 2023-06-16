@@ -14,4 +14,4 @@ commonAnnotations:
 images: # kpt-set: ${IMAGE_REF}
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "2.4.1-75ee1728--2023-04-23--257" # {"$imagepolicy": "flux-system:distribution-game-web:tag"}
+    newTag: "2.4.1-75ee1728--2023-04-23--257" # {"$imagepolicy": "flux-system:distribution-game-web-image-policy:tag"}
