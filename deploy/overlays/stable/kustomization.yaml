@@ -6,7 +6,7 @@ resources:
 commonLabels:
   environment: stable
 commonAnnotations:
-  version: stable # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
+  version: 1.0.1 # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
   tag: ${GIT_TAG:=stable}
 configMapGenerator:
   - name: elasticapm-config
@@ -23,4 +23,4 @@ patches:
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "stable" # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
+    newTag: "1.0.1" # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
