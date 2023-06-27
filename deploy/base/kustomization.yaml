@@ -12,6 +12,9 @@ commonLabels:
   app: distribution-game
   app.kubernetes.io/name: distribution-game
 
+
+# Patch nginx base; simplify deployment name
+#
 patches:
   - target:
       kind: Deployment
@@ -25,3 +28,6 @@ patches:
       - op: add
         path: /spec/template/spec/serviceAccountName
         value: distribution-game-serviceaccount
+      - op: replace
+        path: /metadata/name
+        value: deployment
