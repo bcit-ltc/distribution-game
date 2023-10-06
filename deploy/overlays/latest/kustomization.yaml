@@ -1,10 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: distribution-game
 resources:
   - ../../base
 commonLabels:
   environment: latest
+# Prefix/Suffix required for VaultAuth configuration
+#
+namePrefix: distribution-game-
+nameSuffix: -latest
+# Facilitate kustomization name updating
+#
+configurations:
+  - kustomizeconfig.yaml
 commonAnnotations:
   version: 1.0.3-7e75e987--2023-06-27.1687886861 # {"$imagepolicy": "distribution-game:distribution-game-image-policy:tag"}
 images:
@@ -14,19 +21,28 @@ images:
 # Adds elasticapm config to deployment
 #
 patches:
+  # Patches ingress with "latest--"
   - target:
       kind: Ingress
     path: ingress-patch.yaml
+  # Adds secrets to deployment
   - target:
       kind: Deployment
-    patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/envFrom
-        value: [{"configMapRef": {"name":"elasticapm-config"}}]
-# Generates elasticapm config
-#
+    path: deployment-patch.yaml
+  # Incorporate vault-secrets
+  #
+  # adds `-latest` suffix to VaultAuth `spec.mount`
+  - target:
+      kind: VaultAuth
+    path: vault-secrets-latest/vault-auth-patch.yaml
+components:
+  # Include environment-specific secrets
+  - ./vault-secrets-latest
+  # Required for VaultAuth role and serviceaccounts
+  - ../../base/components/vault-auth
 configMapGenerator:
+  # Updates elasticapm config
   - name: elasticapm-config
     literals:
       - ELASTIC_APM_SERVICE_NAME=distribution-game-latest
-      - ELASTIC_APM_SERVER_URL=https://bcit-ltc.apm.westus2.azure.elastic-cloud.com
+    behavior: merge
