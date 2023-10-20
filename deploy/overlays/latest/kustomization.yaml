@@ -13,11 +13,11 @@ nameSuffix: -latest
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 1.0.3-6b077b12--2023-10-06.1696635862 # {"$imagepolicy": "distribution-game:distribution-game-image-policy-latest:tag"}
+  version: 1.0.4-af1fc0bc--2023-10-19.1697755135 # {"$imagepolicy": "distribution-game:distribution-game-image-policy-latest:tag"}
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "1.0.3-6b077b12--2023-10-06.1696635862" # {"$imagepolicy": "distribution-game:distribution-game-image-policy-latest:tag"}
+    newTag: "1.0.4-af1fc0bc--2023-10-19.1697755135" # {"$imagepolicy": "distribution-game:distribution-game-image-policy-latest:tag"}
 # Adds elasticapm config to deployment
 #
 patches:
