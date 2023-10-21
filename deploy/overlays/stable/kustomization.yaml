@@ -13,9 +13,9 @@ nameSuffix: -stable
 configurations:
   - kustomizeconfig.yaml
 commonAnnotations:
-  version: 1.0.3 # {"$imagepolicy": "distribution-game:distribution-game-image-policy-stable:tag"}
+  version: 1.0.4 # {"$imagepolicy": "distribution-game:distribution-game-image-policy-stable:tag"}
   tag: ${GIT_TAG:=stable}
 images:
   - name: "distribution-game"
     newName: "registry.ltc.bcit.ca/web-apps/distribution-game"
-    newTag: "1.0.3" # {"$imagepolicy": "distribution-game:distribution-game-image-policy-stable:tag"}
+    newTag: "1.0.4" # {"$imagepolicy": "distribution-game:distribution-game-image-policy-stable:tag"}
