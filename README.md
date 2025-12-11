@@ -1,9 +1,11 @@
 <!-- SPDX-License-Identifier: MPL-2.0 -->
 # Distribution Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+School of Business Distribution Game
 
 ## Developing
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 1. Open a terminal and run
 
