@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: MPL-2.0 -->
 # Distribution Game
 
-School of Business Distribution Game
+School of Business Distribution Game.
 
 ## Developing
 
